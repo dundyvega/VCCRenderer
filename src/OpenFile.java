@@ -95,7 +95,7 @@ public class OpenFile {
 			            	  
 			            	  try {
 			            
-			            	  lines = FileOperator.getLines(fileName);
+			            	  lines = FileOperator.getLines(chooser.getSelectedFile().toString());
 			            	  
 			            	  //átmásolja a megjegyzést
 			            	  megjegyzesAtmasolasa();
@@ -249,12 +249,17 @@ public class OpenFile {
 			private String hulyesegekTorlese(String phone) {
 				// TODO Auto-generated method stub
 				
-				if (phone.contains("_x005F")) {
+				String[] phones = phone.split("_");
+				
+				if (phones.length > 0)  {
 					
-					phone = phone.split("_")[0];
+					return phones[0];
 				}
 				
-				return phone;
+				else
+				{
+					return phone;
+				}
 			}
 
 

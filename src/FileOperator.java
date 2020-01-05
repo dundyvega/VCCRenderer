@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -231,6 +232,12 @@ public final class FileOperator {
 		  
 		  excelFile.close();
 		
+	}
+
+	public static ArrayList<LineFromExcelFile> getLines(File selectedFile) {
+		// TODO Auto-generated method stub
+		System.out.println(selectedFile.toString());
+		return null;
 	}
 
 }
