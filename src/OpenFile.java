@@ -95,14 +95,14 @@ public class OpenFile {
 			            	  
 			            	  try {
 			            
-			            	  lines = FileOperator.getLines(chooser.getSelectedFile().toString());
+			            	  lines = FileOperator.getLines(chooser.getSelectedFile().getPath());
 			            	  
 			            	  //átmásolja a megjegyzést
 			            	  megjegyzesAtmasolasa();
 			            	  
 			            	  telefonszamokRenderelese();
 			            	 
-			            	 FileOperator.setLines(chooser.getSelectedFile().toString(), lines);
+			            	 FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
 			            	  
 			            	 // System.out.println(lines.get(0).toString());
 			            	  
