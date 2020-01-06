@@ -102,7 +102,7 @@ public class OpenFile {
 			            	  
 			            	  telefonszamokRenderelese();
 			            	 
-			            	 FileOperator.setLines(fileName, lines);
+			            	 FileOperator.setLines(chooser.getSelectedFile().toString(), lines);
 			            	  
 			            	 // System.out.println(lines.get(0).toString());
 			            	  
