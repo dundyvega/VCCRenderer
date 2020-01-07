@@ -1,6 +1,7 @@
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -105,8 +106,14 @@ public class OpenFile {
 			            	 FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
 			            	  
 			            	 // System.out.println(lines.get(0).toString());
+			            	 
+			            	 JOptionPane.showMessageDialog(null, "kész!");
 			            	  
-			            	  } catch (Exception ex) {System.out.println(ex + " fdsfsd");}
+			            	  } catch (Exception ex) {
+			            		  
+			            		  JOptionPane.showMessageDialog(null, ex.toString(), "Hibaüzenet", JOptionPane.ERROR_MESSAGE);
+			            		  
+			            	  }
 			            	  
 			              }
 			        }

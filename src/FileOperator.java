@@ -27,6 +27,9 @@ public final class FileOperator {
 			
 			str = NumberToTextConverter.toText(cell.getNumericCellValue());
 			
+		} else if (cell.getCellType() == CellType.ERROR) {
+			str = cell.getErrorCellValue() + "";
+			
 		} else if (!cell.getStringCellValue().equals("") && cell.getStringCellValue() != null) {
 			
 			str = cell.getStringCellValue();
