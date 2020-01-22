@@ -220,44 +220,45 @@ public class OpenFile {
 		business = hulyesegekTorlese(business);  //0  
 		munkahelyi = hulyesegekTorlese(munkahelyi); // 5
 		
+		
+		String telszam = "";
 		//System.out.println(mobil1 + " " +mobil2 + " " + otthoni1 + " " + otthoni2 + "  "  + munkahelyi + " " + business);
 		
-		ArrayList<String> telszamok = new ArrayList<String>();
+		//ArrayList<String> telszamok = new ArrayList<String>();
 
-		if (!vezetekes(business) && !business.equals("") && !business.contains("1111111")) {
-			telszamok.add(business);
-		}
 		
 		if (!vezetekes(mobil1) && !mobil1.equals("") && !mobil1.contains("1111111")) {
 			//System.out.println(mobil1);
-			telszamok.add(mobil1);
+			telszam = mobil1;
 		}
 		
-		if (!vezetekes(mobil2) && !mobil2.equals("") && !mobil2.contains("1111111")) {
-			telszamok.add(mobil2);
+		if (!vezetekes(business) && !business.equals("") && !business.contains("1111111") && telszam.equals("")) {
+			telszam = business;
 		}
 		
-		if (!vezetekes(otthoni1) && !otthoni1.equals("") && !otthoni1.contains("1111111")) {
-			telszamok.add(otthoni1);
+		if (!vezetekes(mobil2) && !mobil2.equals("") && !mobil2.contains("1111111") && telszam.equals("")) {
+			telszam = mobil2;
 		}
 		
-		if (!vezetekes(otthoni2) && !otthoni2.equals("") && !otthoni2.contains("1111111")) {
-			telszamok.add(otthoni2);
+		if (!vezetekes(otthoni1) && !otthoni1.equals("") && !otthoni1.contains("1111111") && telszam.equals("")) {
+			telszam = otthoni1;
 		}
 		
-		if (!vezetekes(munkahelyi) && !munkahelyi.equals("") && !munkahelyi.contains("1111111")) {
-			telszamok.add(munkahelyi);
+		if (!vezetekes(otthoni2) && !otthoni2.equals("") && !otthoni2.contains("1111111") && telszam.equals("")) {
+			telszam= otthoni2;
 		}
 		
-		if (telszamok.size() == 0) {
-			telszamok.add("");
+		if (!vezetekes(munkahelyi) && !munkahelyi.equals("") && !munkahelyi.contains("1111111") && telszam.equals("")) {
+			telszam= munkahelyi;
 		}
+		
+
 		
 		//System.out.println("lófaszok");
 	
 
 		
-		return telszamok.get(0);
+		return telszam;
 	}
 	
 	
@@ -388,7 +389,7 @@ public class OpenFile {
 		
 		return !mobil;
 		} else {
-			return false;
+			return true;
 		}
 	}
 
