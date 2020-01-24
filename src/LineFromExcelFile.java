@@ -25,6 +25,83 @@ public class LineFromExcelFile {
 	private String VUI;
 	private String megjegyzes_2;
 	private String phone3;
+	
+	
+	public int mezoIndexVissza(String s) {
+		
+		if (s.equals("account_number")) { return 0;}
+		if (s.equals("iktato")) { return 1;}
+		if (s.equals("erintett_szolgaltatasok")) { return 2;}
+		if (s.equals("hibabejelentes_kategoriaja")) { return 3;}
+		if (s.equals("hiba_oka")) { return 4;}
+		if (s.equals("kivizsgalas_eredmenye")) { return 5;}
+		if (s.equals("tovabbitas_hdra")) { return 6;}
+		if (s.equals("megjegyzes")) { return 7;}
+		if (s.equals("ccss_contact_id")) { return 8;}
+		if (s.equals("name")) { return 9;}
+		if (s.equals("ugyfeltipus")) { return 10;}
+		if (s.equals("phone2")) { return 11;}
+		if (s.equals("phone1")) { return 12;}
+		if (s.equals("folyamat_indulasa")) { return 13;}
+		if (s.equals("fazis_neve")) { return 14;}
+		if (s.equals("folyamat_inditoja")) { return 15;}
+		if (s.equals("szolgaltatasi_cim")) { return 16;}
+		if (s.equals("fazis_indulasa")) { return 17;}
+		if (s.equals("DB_TYPE")) { return 18;}
+		if (s.equals("MEGJ_HOSSZ")) { return 19;}
+		if (s.equals("BEZ")) { return 20;}
+		if (s.equals("ANGOL")) { return 21;}
+		if (s.equals("VUI")) { return 22;}
+		if (s.equals("megjegyzes_2")) { return 23;}
+		if (s.equals("phone3")) { return 24;}
+		
+		return 1000;
+		
+	}
+	
+	
+	public String getValueOf(String mezo) {
+		
+		return getMezoIndex(mezoIndexVissza(mezo));
+	}
+	
+	public String getMezoIndex(int i) {
+		
+		
+		switch(i) {	
+
+
+		case 0: return account_number;
+		case 1: return iktato;
+		case 2: return erintett_szolgaltatasok;
+		case 3: return hibabejelentes_kategoriaja;
+		case 4: return hiba_oka;
+		case 5: return kivizsgalas_eredmenye;
+		case 6: return tovabbitas_hdra;
+		case 7: return megjegyzes;
+		case 8: return ccss_contact_id;
+		case 9: return name;
+		case 10: return ugyfeltipus;
+		case 11: return phone2;
+		case 12: return phone1;
+		case 13: return folyamat_indulasa;
+		case 14: return fazis_neve;
+		case 15: return folyamat_inditoja;
+		case 16: return szolgaltatasi_cim;
+		case 17: return fazis_indulasa;
+		case 18: return DB_TYPE;
+		case 19: return MEGJ_HOSSZ;
+		case 20: return BEZ;
+		case 21: return ANGOL;
+		case 22: return VUI;
+		case 23: return megjegyzes_2;
+		case 24: return phone3;
+		
+		default: return "1000";
+
+	}
+		
+	}
 	/**
 	 * @return the account_number
 	 */

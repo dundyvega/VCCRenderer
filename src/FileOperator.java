@@ -10,9 +10,15 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.sl.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -106,6 +112,7 @@ public final class FileOperator {
 			lines.add(line);
 			
 			//System.out.println(line.toString());
+		//System.out.println(line.getName());
 			
 		}
 		
@@ -118,17 +125,7 @@ public final class FileOperator {
 		
 	}
 
-	public static void setLines(String folder, String string, ArrayList<LineFromExcelFile> lines) throws IOException {
-		// TODO Auto-generated method stub
-		
-		string = string.split("\\.")[0] + " - Automata IVR.xlsx";
-		System.out.println(string);
-		string = folder + "/" + string;
-		System.out.println(string);
-		
-		
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("data");
+	private static void kiiratas(ArrayList<LineFromExcelFile> lines, XSSFSheet sheet) {
 		
 		//kiírjuk az adatokat
 		int rowIndex = 0;
@@ -242,6 +239,24 @@ public final class FileOperator {
 			
 		}
 		
+	}
+	
+	public static void setLines(String folder, String string, ArrayList<LineFromExcelFile> lines, ArrayList<LineFromExcelFile> husszuUgyek, String[] uresMappak, String[] uresFajlokVege, String hosszuMappa) throws IOException {
+		// TODO Auto-generated method stub
+		
+		string = string.split("\\.")[0] + " - Automata IVR.xlsx";
+		//System.out.println(string);
+		string = folder + "/" + string;
+		//System.out.println(string);
+		
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("data");
+		
+		kiiratas(lines, sheet);
+		
+
+		
 		
 		
 		FileOutputStream excelFile = new FileOutputStream(string);
@@ -252,10 +267,66 @@ public final class FileOperator {
 		  workbook.close();
 		  
 		  excelFile.close();
+		  
+		  //hosszú ügyek
+		  
+		  workbook = new XSSFWorkbook();
+		   sheet = workbook.createSheet("Data");
+		  
+		   kiiratas(husszuUgyek, sheet);
+		   
+		   Date date = new Date(System.currentTimeMillis());
+			SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd");
+			String dat = formatter.format(date);
+			
+			string = folder + "/"+ hosszuMappa + dat + " - Hosszú ügyek.xlsx"; 
+		   
+			 excelFile = new FileOutputStream(string);
+			
+			 workbook.write(excelFile);
+			  workbook.close();
+			  
+			  excelFile.close();
+		  
+		  uresMappakElkeszitese(folder, uresMappak, uresFajlokVege);
 		
 	}
+	
+	
+	
 
 	
+	/*
+	 * Létrehozza az üres fájlokat
+	 */
+	private static void uresMappakElkeszitese(String folder, String[] uresMappak, String[] uresFajlokVege) throws IOException {
+		// TODO Auto-generated method stub
+		
+		
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd");
+		String dat = formatter.format(date);
+		for (int i = 0; i < uresMappak.length; ++i) {
+			
+			String string = folder + "/" + uresMappak[i] + dat + uresFajlokVege[i];
+			//System.out.println(string);
+			
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			XSSFSheet sheet = workbook.createSheet("data");
+			
+			FileOutputStream excelFile = new FileOutputStream(string);
+			  
+			
+			
+			  workbook.write(excelFile);
+			  workbook.close();
+			  
+			  excelFile.close();
+			
+		}
+ 		
+		
+	}
 
 	public static ArrayList<LineFromOTGSMSExcel> getLines2(File file) throws IOException {
 
@@ -281,28 +352,28 @@ public final class FileOperator {
 
 			
 			
-			line.setUres(cellStringValue(currentRow.getCell(0)));
-			line.setIKTSZ(cellStringValue(currentRow.getCell(1)));
-			line.setACCOUNT_NUMBER(cellStringValue(currentRow.getCell(2)));
-			line.setCONTACT_TYPE(cellStringValue(currentRow.getCell(3)));
-			line.setSUBJECT(cellStringValue(currentRow.getCell(4)));
-			line.setSTATUSZ(cellStringValue(currentRow.getCell(5)));
-			line.setINDITAS(cellStringValue(currentRow.getCell(6)));
-			line.setINDITAS_NAPJA(cellStringValue(currentRow.getCell(7)));
-			line.setLEZARAS_NAPJA(cellStringValue(currentRow.getCell(8)));
-			line.setNemo_OTG_ID(cellStringValue(currentRow.getCell(9)));
-			line.setINTERFACE_ID(cellStringValue(currentRow.getCell(10)));
-			line.setOTG_STATUS_DATE(cellStringValue(currentRow.getCell(11)));
-			line.setOTG_CLOSED(cellStringValue(currentRow.getCell(12)));
-			line.setSTART_TIME(cellStringValue(currentRow.getCell(13)));
-			line.setEND_TIME(cellStringValue(currentRow.getCell(14)));
-			line.setSMS_SENT_TO(cellStringValue(currentRow.getCell(15)));
-			line.setOtthoni1(cellStringValue(currentRow.getCell(16)));
-			line.setOtthoni2(cellStringValue(currentRow.getCell(17)));
-			line.setMobil1(cellStringValue(currentRow.getCell(18)));
-			line.setMobil2(cellStringValue(currentRow.getCell(19)));
-			line.setBusiness(cellStringValue(currentRow.getCell(20)));
-			line.setMunkahelyi(cellStringValue(currentRow.getCell(21)));
+			//line.setUres(cellStringValue(currentRow.getCell(0)));
+			line.setIKTSZ(cellStringValue(currentRow.getCell(0)));
+			line.setACCOUNT_NUMBER(cellStringValue(currentRow.getCell(1)));
+			line.setCONTACT_TYPE(cellStringValue(currentRow.getCell(2)));
+			line.setSUBJECT(cellStringValue(currentRow.getCell(3)));
+			line.setSTATUSZ(cellStringValue(currentRow.getCell(4)));
+			line.setINDITAS(cellStringValue(currentRow.getCell(5)));
+			line.setINDITAS_NAPJA(cellStringValue(currentRow.getCell(6)));
+			line.setLEZARAS_NAPJA(cellStringValue(currentRow.getCell(7)));
+			line.setNemo_OTG_ID(cellStringValue(currentRow.getCell(8)));
+			line.setINTERFACE_ID(cellStringValue(currentRow.getCell(9)));
+			line.setOTG_STATUS_DATE(cellStringValue(currentRow.getCell(10)));
+			line.setOTG_CLOSED(cellStringValue(currentRow.getCell(11)));
+			line.setSTART_TIME(cellStringValue(currentRow.getCell(12)));
+			line.setEND_TIME(cellStringValue(currentRow.getCell(13)));
+			line.setSMS_SENT_TO(cellStringValue(currentRow.getCell(14)));
+			line.setOtthoni1(cellStringValue(currentRow.getCell(15)));
+			line.setOtthoni2(cellStringValue(currentRow.getCell(16)));
+			line.setMobil1(cellStringValue(currentRow.getCell(17)));
+			line.setMobil2(cellStringValue(currentRow.getCell(18)));
+			line.setBusiness(cellStringValue(currentRow.getCell(19)));
+			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
@@ -324,14 +395,89 @@ public final class FileOperator {
 		
 	
 	}
+	
+	
+	public static ArrayList<LineFromOTGSMSExcel> getLines2HSSF(File file) throws IOException {
+
+		// TODO Auto-generated method stub
+		ArrayList<LineFromOTGSMSExcel> lines = new ArrayList<LineFromOTGSMSExcel>();
+		
+		FileInputStream excelFile = new FileInputStream(file.getPath());
+		Workbook workbook = WorkbookFactory.create(file);
+		Sheet datatypeSheet = (Sheet) workbook.getSheetAt(0);
+		Iterator<Row> iterator = datatypeSheet.iterator();
+
+		//System.out.println("Itt még ok");
+		
+		//adatok kiolvasása
+		while (iterator.hasNext()) {
+			
+
+			Row currentRow = iterator.next();
+			
+	
+			
+			LineFromOTGSMSExcel line = new LineFromOTGSMSExcel();
+
+			
+			
+			//line.setUres(cellStringValue(currentRow.getCell(0)));
+			line.setIKTSZ(cellStringValue(currentRow.getCell(0)));
+			line.setACCOUNT_NUMBER(cellStringValue(currentRow.getCell(1)));
+			line.setCONTACT_TYPE(cellStringValue(currentRow.getCell(2)));
+			line.setSUBJECT(cellStringValue(currentRow.getCell(3)));
+			line.setSTATUSZ(cellStringValue(currentRow.getCell(4)));
+			line.setINDITAS(cellStringValue(currentRow.getCell(5)));
+			line.setINDITAS_NAPJA(cellStringValue(currentRow.getCell(6)));
+			line.setLEZARAS_NAPJA(cellStringValue(currentRow.getCell(7)));
+			line.setNemo_OTG_ID(cellStringValue(currentRow.getCell(8)));
+			line.setINTERFACE_ID(cellStringValue(currentRow.getCell(9)));
+			line.setOTG_STATUS_DATE(cellStringValue(currentRow.getCell(10)));
+			line.setOTG_CLOSED(cellStringValue(currentRow.getCell(11)));
+			line.setSTART_TIME(cellStringValue(currentRow.getCell(12)));
+			line.setEND_TIME(cellStringValue(currentRow.getCell(13)));
+			line.setSMS_SENT_TO(cellStringValue(currentRow.getCell(14)));
+			line.setOtthoni1(cellStringValue(currentRow.getCell(15)));
+			line.setOtthoni2(cellStringValue(currentRow.getCell(16)));
+			line.setMobil1(cellStringValue(currentRow.getCell(17)));
+			line.setMobil2(cellStringValue(currentRow.getCell(18)));
+			line.setBusiness(cellStringValue(currentRow.getCell(19)));
+			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
+			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
+			//line.setName(cellStringValue(currentRow.getCell(23)));
+			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
+			
+			//System.out.println(line.toString());	
+			
+			lines.add(line);
+			
+			//System.out.println(line.toString());
+			
+		}
+		
+		//System.out.println("valami");
+		
+		workbook.close();
+		
+		return lines;
+		
+		
+	
+	}
+	
+	
+	
+	
+	
+	
 
 	public static void setLines2(String fileName, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
 		// TODO Auto-generated method stub
 		
 		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat formatter = new SimpleDateFormat("YYY.mm.dd HH 'óra'");
+		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd HH 'óra'");
 		fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
-		System.out.println(fileName);
+		//System.out.println(fileName);
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("data");
@@ -356,8 +502,8 @@ public final class FileOperator {
 			cellIndex = 0;
 			
 			
-			Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
-			cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getIKTSZ());
+			//Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
+			Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getIKTSZ());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getACCOUNT_NUMBER());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getCONTACT_TYPE());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getSUBJECT());
