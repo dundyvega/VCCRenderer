@@ -117,6 +117,7 @@ public class OpenFile {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Bűbájos Excel Varázslók");
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
@@ -132,7 +133,10 @@ public class OpenFile {
 			
 		};
 		
+		//BufferedImage iconImage = ImageIO.read(getClass().getResource("/img/Icon.ico"));
 		
+		
+		frame.setIconImage(image);
 		
 		btnVCC.addActionListener(new ActionListener() {
 			
@@ -189,7 +193,7 @@ public class OpenFile {
 			            	  telefonszamokRenderelese();
 			            	 
 			            	 FileOperator.setLines(chooser.getSelectedFile().getParent(), chooser.getSelectedFile().getName(), 
-			            			 lines, husszuUgyek, uresMappak, uresFajlokVege, hosszu);
+			            			 lines, husszuUgyek, uresMappak, uresFajlokVege, hosszu, legordulo);
 			            	  
 			            	 // System.out.println(lines.get(0).toString());
 			            	 
@@ -552,10 +556,17 @@ public class OpenFile {
 		
 		boolean hosszu = false;
 		
-		for (int i = 1; i < deleting.length && !hosszu; ++i) {
+		
+		
+		
+		for (int i = 0; i < deleting.length && !hosszu; ++i) {
+			//System.out.println(deleting[i]);
 			
-			String a = move[i].split("=")[0];
-			String b = move[i].split("=")[1];
+			
+			String a = deleting[i].split("=")[0];
+			String b = deleting[i].split("=")[1];
+			
+			//System.out.println(a + "lesz a "  + b);
 			
 			if (ln.getValueOf(a).equals(b)) {
 				hosszu = true;
@@ -646,12 +657,22 @@ public class OpenFile {
 		
 			
 			String a1 = a.split("&&")[0];
+			
+			System.out.println("a1 " +a1);
+			
 			String a2 = a.split("&&")[1];
+			
+			System.out.println("a2" + a2);
 			
 			String b = nemKizart[i].split("~")[1];
 			
 			String b1 = b.split("&&")[0];
+			
+			System.out.println("b1 " + b1);
+			
 			String b2 = b.split("&&")[1];
+			
+			System.out.println("b2: " + b2);
 			
 			//System.out.println(a1 + " " + a2 + " " + b1 + " " + b2);
 			
@@ -662,6 +683,7 @@ public class OpenFile {
 			
 			
 		}
+		
 		
 		
 		

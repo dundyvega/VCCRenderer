@@ -23,6 +23,7 @@ public class LineFromOTGSMSExcel implements Comparable {
 	private String mobil2;
 	private String business;
 	private String munkahelyi;
+	private String ADE;
 	private String otgendDay;
 	private String name;
 	private String phone1;
@@ -190,6 +191,12 @@ public class LineFromOTGSMSExcel implements Comparable {
 		return ((LineFromOTGSMSExcel)(arg0)).getACCOUNT_NUMBER().compareTo(this.getACCOUNT_NUMBER());
 		}
 		
+	}
+	public String getADE() {
+		return ADE;
+	}
+	public void setADE(String aDE) {
+		ADE = aDE;
 	}
 
 

@@ -29,30 +29,40 @@ public final class FileOperator {
 	
 		String str = "";
 		
-		if (cell != null && cell.getCellType() != CellType.BLANK)
+		
+		if (cell != null && cell.getCellType() != CellType.BLANK) {
+			
 		if (cell.getCellType() == CellType.NUMERIC) {
 			
 			
 			if (!HSSFDateUtil.isCellDateFormatted(cell)) {
 				
 				str = NumberToTextConverter.toText(cell.getNumericCellValue());
+				//System.out.println("semmi");
 			} else {
 				
 				DateFormat df = new SimpleDateFormat("yyy/MM/dd");
 				str = df.format(cell.getDateCellValue());
-				
+				//System.out.println("semmi");
 			}
 			
 		} else if (cell.getCellType() == CellType.ERROR) {
-			str = cell.getErrorCellValue() + "";
+			str = "error" + "";
+			//System.out.println("semmi");
+			//System.out.println("error");
 			
 		} else
 			
-			if (!cell.getStringCellValue().equals("") && cell.getStringCellValue() != null) {
-			
+			if (cell.getCellType() == CellType.STRING && !cell.getStringCellValue().equals("") && cell.getStringCellValue() != null) {
+		
+				//System.out.println("semmi");	
+				
 			str = cell.getStringCellValue();
 			
 		}
+		} 
+		
+		//System.out.println(str);
 	
 		return str;
 	
@@ -100,16 +110,20 @@ public final class FileOperator {
 			line.setSzolgaltatasi_cim(cellStringValue(currentRow.getCell(16)));
 			line.setFazis_indulasa(cellStringValue(currentRow.getCell(17)));
 			line.setDB_TYPE(cellStringValue(currentRow.getCell(18)));
+			
 			line.setMEGJ_HOSSZ(cellStringValue(currentRow.getCell(19)));
 			line.setBEZ(cellStringValue(currentRow.getCell(20)));
 			line.setANGOL(cellStringValue(currentRow.getCell(21)));
 			line.setVUI(cellStringValue(currentRow.getCell(22)));
 			line.setMegjegyzes_2(cellStringValue(currentRow.getCell(23)));
+			//System.out.println(line.getName());
 			line.setPhone3(cellStringValue(currentRow.getCell(24)));
 			
 			//System.out.println(line.toString());	
 			
 			lines.add(line);
+			
+		
 			
 			//System.out.println(line.toString());
 		//System.out.println(line.getName());
@@ -241,7 +255,7 @@ public final class FileOperator {
 		
 	}
 	
-	public static void setLines(String folder, String string, ArrayList<LineFromExcelFile> lines, ArrayList<LineFromExcelFile> husszuUgyek, String[] uresMappak, String[] uresFajlokVege, String hosszuMappa) throws IOException {
+	public static void setLines(String folder, String string, ArrayList<LineFromExcelFile> lines, ArrayList<LineFromExcelFile> husszuUgyek, String[] uresMappak, String[] uresFajlokVege, String hosszuMappa, String[] legordulo) throws IOException {
 		// TODO Auto-generated method stub
 		
 		string = string.split("\\.")[0] + " - Automata IVR.xlsx";
@@ -275,9 +289,27 @@ public final class FileOperator {
 		  
 		   kiiratas(husszuUgyek, sheet);
 		   
+		   
+		   sheet = workbook.createSheet("status");
+		   
+		   int rowIndex = 0;
+		  // Row row = sheet.createRow(rowIndex);
+		   
+		   for (int i = 0; i < legordulo.length; ++i) {
+			   Row row = sheet.createRow(rowIndex++); 
+			   Cell cell = row.createCell(0);
+			   cell.setCellValue(legordulo[i]);
+			   
+			   
+		   }
+		   
+		   
 		   Date date = new Date(System.currentTimeMillis());
 			SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd");
 			String dat = formatter.format(date);
+			
+			
+			
 			
 			string = folder + "/"+ hosszuMappa + dat + " - Hosszú ügyek.xlsx"; 
 		   
@@ -374,6 +406,7 @@ public final class FileOperator {
 			line.setMobil2(cellStringValue(currentRow.getCell(18)));
 			line.setBusiness(cellStringValue(currentRow.getCell(19)));
 			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
+			line.setADE(cellStringValue(currentRow.getCell(21)));
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
@@ -443,6 +476,9 @@ public final class FileOperator {
 			line.setMobil2(cellStringValue(currentRow.getCell(18)));
 			line.setBusiness(cellStringValue(currentRow.getCell(19)));
 			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
+			line.setADE(cellStringValue(currentRow.getCell(21)));
+			
+			System.out.println(line.getADE() + "Ade");
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
@@ -524,6 +560,7 @@ public final class FileOperator {
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getMobil2());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getBusiness());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getMunkahelyi());
+					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getADE());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOtgendDay());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getName());
 					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getPhone1());
