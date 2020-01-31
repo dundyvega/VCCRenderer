@@ -512,20 +512,73 @@ public final class FileOperator {
 		
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd HH 'óra'");
-		fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
+		//fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
+		
+		String mobiljaVan = fileName + "OTG -" + formatter.format(date) + ".xlsx";
+		String emailCimeVan = fileName + "OTG - " + formatter.format(date) + " email.xlsx";
+		String vezetekesSzamaVan = fileName + "OTG - " + formatter.format(date) + " vezetekes.xlsx";
+		String ures = fileName + "OTG - " + formatter.format(date) + " ures.xlsx";
+		
+		
+		
 		//System.out.println(fileName);
 		
+		
+		/* mobilos excel */
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("data");
 		
 		int rowIndex = 0;
 		int cellIndex;
 		
+		/*emailosra vonatkozó excel */
+		
+		
+		XSSFWorkbook workbookEmail = new XSSFWorkbook();
+		XSSFSheet sheetEmail = workbookEmail.createSheet("data");
+		
+		int rowIndexEmail = 0;
+		int cellIndexEmail;
+		
+		
+		
+		/*vezetekes*/
+		
+		XSSFWorkbook workbookVezetekes = new XSSFWorkbook();
+		XSSFSheet sheetVezetekes = workbookVezetekes.createSheet("data");
+		
+		int rowIndexVezetekes = 0;
+		int cellIndexVezetekes;
+		
+		
+		/**
+		 * itt már meg kell várjam Örsöt, mivel ha van email címe, akkor hová kerüljön be
+		 */
+		
+		/*üres*/
+		
+		XSSFWorkbook workbookUres = new XSSFWorkbook();
+		XSSFSheet sheetUres = workbookUres.createSheet("data");
+		
+		int rowIndexUres = 0;
+		int cellIndexUres;
+		
+		/*fájlok létrehozva */
+		
+		
 		lines2.get(0).setName("name");
 		lines2.get(0).setPhone1("phone1");
 		lines2.get(0).setOtgendDay("OTGEndDay");
 		
-		for (int i = 0; i < lines2.size(); ++i) {
+		//első sor kiirása
+		
+		teddBeAfileBa(sheet, rowIndex++, lines2.get(0));
+		teddBeAfileBa(sheetUres, rowIndexUres++, lines2.get(0));
+		teddBeAfileBa(sheetEmail, rowIndexEmail++, lines2.get(0));
+		teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, lines2.get(0));
+		
+		
+		for (int i = 1; i < lines2.size(); ++i) {
 			
 			
 			if (i == 0 || !lines2.get(i).getACCOUNT_NUMBER().equals(lines2.get(i -1).getACCOUNT_NUMBER()) ||
@@ -533,42 +586,52 @@ public final class FileOperator {
 					!lines2.get(i).getNemo_OTG_ID().equals(lines2.get(i - 1).getNemo_OTG_ID())) {
 			
 		if (i == 0 || lines2.get(i).getSMS_SENT_TO().equals("")) {
-			Row row = sheet.createRow(rowIndex++);
+					
+					LineFromOTGSMSExcel ln = lines2.get(i);
+					
+					if (!ln.getPhone1().equals("")) { // ha mobil
+						
+						teddBeAfileBa(sheet, rowIndex++, ln);
+					} else if (ln.getADE().equals("") && ln.getPhone2().equals("")) { // ha üres
+						teddBeAfileBa(sheetUres, rowIndexUres++, ln);
+					} else if (!ln.getADE().equals("") && !ln.getPhone2().equals("")) { // ha mindkettő
+						teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln);
+						
+					} else if (!ln.getADE().equals("")) { // ha emailja van csak
+						
+						teddBeAfileBa(sheetEmail, rowIndexEmail++, ln);
+					} else {
+						teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln);
+					}
 			
-			cellIndex = 0;
-			
-			
-			//Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
-			Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getIKTSZ());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getACCOUNT_NUMBER());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getCONTACT_TYPE());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getSUBJECT());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getSTATUSZ());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getINDITAS());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getINDITAS_NAPJA());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getLEZARAS_NAPJA());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getNemo_OTG_ID());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getINTERFACE_ID());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOTG_STATUS_DATE());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOTG_CLOSED());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getSTART_TIME());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getEND_TIME());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getSMS_SENT_TO());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOtthoni1());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOtthoni2());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getMobil1());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getMobil2());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getBusiness());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getMunkahelyi());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getADE());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getOtgendDay());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getName());
-					cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getPhone1());
 				}
 			}
 		}
 		
-		FileOutputStream excelFile = new FileOutputStream(fileName);
+		System.out.println("dobozos csomag");
+		
+	
+		  
+		
+		kiiratasFileba(mobiljaVan, workbook);
+		  
+		  kiiratasFileba(vezetekesSzamaVan, workbookVezetekes);
+		  
+		  kiiratasFileba(emailCimeVan, workbookEmail);
+		  
+		 kiiratasFileba(ures, workbookUres);
+		  
+	}
+	
+	
+	
+	
+	
+	private static void kiiratasFileba(String string, XSSFWorkbook workbook) throws IOException {
+		// TODO Auto-generated method stub
+		
+		
+		FileOutputStream excelFile = new FileOutputStream(string);
 		  
 		
 		
@@ -577,6 +640,46 @@ public final class FileOperator {
 		  
 		  excelFile.close();
 		
+		
 	}
+
+	public static void teddBeAfileBa(XSSFSheet sheet, int rowIndex, LineFromOTGSMSExcel lines2) {
+		
+		
+		Row row = sheet.createRow(rowIndex);
+		
+		int cellIndex = 0;
+		
+		
+		//Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
+		Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getIKTSZ());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getACCOUNT_NUMBER());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getCONTACT_TYPE());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSUBJECT());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSTATUSZ());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getINDITAS());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getINDITAS_NAPJA());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getLEZARAS_NAPJA());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getNemo_OTG_ID());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getINTERFACE_ID());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getOTG_STATUS_DATE());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getOTG_CLOSED());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSTART_TIME());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getEND_TIME());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSMS_SENT_TO());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getOtthoni1());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getOtthoni2());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getMobil1());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getMobil2());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getBusiness());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getMunkahelyi());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getADE());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getOtgendDay());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getName());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getPhone1());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getPhone2());
+		
+	}
+	
 
 }

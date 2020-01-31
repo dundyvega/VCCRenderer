@@ -117,10 +117,12 @@ public class OpenFile {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Bűbájos Excel Varázslók");
+		frame.setTitle("Bűbájos OTG Excel Varázsló");
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
+		//btnVCC.setEnabled(false);
+		//btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -128,7 +130,7 @@ public class OpenFile {
 			
 			@Override
 			protected void paintComponent(Graphics g) {
-				g.drawImage(image, this.getX() + (this.getWidth() - this.getX())/4, -60, this.getWidth() - 200, this.getHeight() + 100, this);
+				g.drawImage(image, this.getX(), this.getY(), this.getWidth(), this.getHeight(), this);
 			}
 			
 		};
@@ -269,6 +271,8 @@ public class OpenFile {
 			            	  
 			            	  Collections.sort(lines2);
 			            	  
+			            	  phone2();
+			            	  
 			            	  FileOperator.setLines2(fileName, lines2);
 			            	 
 			            	// FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
@@ -287,6 +291,67 @@ public class OpenFile {
 			}
 			
 		}
+
+
+			/*
+			 * a függvény beállítja a phone2 mezőt
+			 */
+			private void phone2() {
+				// TODO Auto-generated method stub
+				
+				lines2.get(0).setPhone2("phone2");
+				
+				for (int i = 1; i < lines2.size(); ++i) {
+					
+					if (lines2.get(i).getPhone1().equals("") || lines2.get(i).getPhone1() == null) {
+					
+						lines2.get(i).setPhone2(getPhone2(i)); 
+						
+					}
+						
+					
+					
+					
+				}
+				
+			}
+
+
+			private String getPhone2(int i) {
+				// TODO Auto-generated method stub
+				
+				String phone2 = "";
+				
+				String bus = lines2.get(i).getBusiness();
+				String mobil2 = lines2.get(i).getMobil2();
+				String otthon1 = lines2.get(i).getOtthoni1();
+				String otthon2 = lines2.get(i).getOtthoni2();
+				String mobil1 = lines2.get(i).getMobil1();
+				
+				
+				
+				
+				phone2 = ( !otthon1.equals("") && !otthon1.contains("1111111"))?otthon1:"";
+				
+				if (phone2.equals(""))
+					phone2 = (!otthon2.equals("") && !otthon2.contains("1111111"))?otthon2:"";
+				
+				if (phone2.equals(""))
+					phone2 = (!bus.equals("") && !bus.contains("1111111"))?bus:"";
+				
+				if (phone2.equals(""))
+					phone2 = (phone2.equals("") && !mobil1.equals("") && !mobil1.contains("1111111"))?mobil1:"";
+				
+				if (phone2.equals(""))
+					phone2 = (phone2.equals("") && !mobil2.equals("") && !mobil2.contains("1111111"))?mobil2:"";
+				
+				
+				
+				if (!phone2.equals(""))
+				System.out.println(phone2);
+				
+				return phone2;
+			}
 
 
 			private void telefonszamokRenderelese() {

@@ -27,6 +27,7 @@ public class LineFromOTGSMSExcel implements Comparable {
 	private String otgendDay;
 	private String name;
 	private String phone1;
+	private String phone2;
 	public String getUres() {
 		return ures;
 	}
@@ -197,6 +198,12 @@ public class LineFromOTGSMSExcel implements Comparable {
 	}
 	public void setADE(String aDE) {
 		ADE = aDE;
+	}
+	public String getPhone2() {
+		return phone2;
+	}
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
 	}
 
 
