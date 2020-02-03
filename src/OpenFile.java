@@ -121,8 +121,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		//btnVCC.setEnabled(false);
-		//btnVCC.setVisible(false);
+		btnVCC.setEnabled(false);
+		btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -331,24 +331,24 @@ public class OpenFile {
 				
 				
 				
-				phone2 = ( !otthon1.equals("") && !otthon1.contains("1111111"))?otthon1:"";
+				phone2 = ( !otthon1.equals("") && !otthon1.contains("111111"))?otthon1:"";
 				
 				if (phone2.equals(""))
-					phone2 = (!otthon2.equals("") && !otthon2.contains("1111111"))?otthon2:"";
+					phone2 = (!otthon2.equals("") && !otthon2.contains("111111"))?otthon2:"";
 				
 				if (phone2.equals(""))
-					phone2 = (!bus.equals("") && !bus.contains("1111111"))?bus:"";
+					phone2 = (!bus.equals("") && !bus.contains("111111"))?bus:"";
 				
 				if (phone2.equals(""))
-					phone2 = (phone2.equals("") && !mobil1.equals("") && !mobil1.contains("1111111"))?mobil1:"";
+					phone2 = (!mobil1.equals("") && !mobil1.contains("111111"))?mobil1:"";
 				
 				if (phone2.equals(""))
-					phone2 = (phone2.equals("") && !mobil2.equals("") && !mobil2.contains("1111111"))?mobil2:"";
+					phone2 = (!mobil2.equals("") && !mobil2.contains("111111"))?mobil2:"";
 				
 				
 				
-				if (!phone2.equals(""))
-				System.out.println(phone2);
+				//if (!phone2.equals(""))
+				//System.out.println(phone2);
 				
 				return phone2;
 			}

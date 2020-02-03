@@ -1,3 +1,3 @@
 git add .
-git commit -m NemSzamokFinomitas
+git commit -m szovegesAllomanyokElkeszitese
 git push

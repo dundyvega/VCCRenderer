@@ -1,7 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -407,6 +409,8 @@ public final class FileOperator {
 			line.setBusiness(cellStringValue(currentRow.getCell(19)));
 			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
 			line.setADE(cellStringValue(currentRow.getCell(21)));
+			line.setPhone1("");
+			line.setPhone2("");
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
@@ -514,11 +518,27 @@ public final class FileOperator {
 		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd HH 'óra'");
 		//fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
 		
-		String mobiljaVan = fileName + "OTG -" + formatter.format(date) + ".xlsx";
-		String emailCimeVan = fileName + "OTG - " + formatter.format(date) + " email.xlsx";
-		String vezetekesSzamaVan = fileName + "OTG - " + formatter.format(date) + " vezetekes.xlsx";
-		String ures = fileName + "OTG - " + formatter.format(date) + " ures.xlsx";
+		String mobiljaVan = fileName + "OTG -" + formatter.format(date) + " Mobil SMS.xlsx";
+		String emailCimeVan = fileName + "OTG - " + formatter.format(date) + " Email.xlsx";
+		String vezetekesSzamaVan = fileName + "OTG - " + formatter.format(date) + " Vezetekes.xlsx";
+		String ures = fileName + "OTG - " + formatter.format(date) + " Ures.xlsx";
 		
+		String csv = fileName + "OTG - " + formatter.format(date) + ".txt";
+		String csvT = "";
+		
+		
+		//
+		// txt fájlok
+		
+		String mobiljaVanTxt = fileName + "OTG - " + formatter.format(date) + " Mobil SMS.txt";
+		String emailCimeVanTxt = fileName + "OTG - " + formatter.format(date) + " Email.txt";
+		String vezetekesSzamaVanTxt = fileName + "OTG - " + formatter.format(date) + " Vezetekes.txt";
+		String uresTxt = fileName + "OTG - " + formatter.format(date) + " Ures.txt";
+		
+		String mobilM = "";
+		String emailM = "";
+		String vezetekesM = "";
+		String uresM = "";
 		
 		
 		//System.out.println(fileName);
@@ -572,10 +592,10 @@ public final class FileOperator {
 		
 		//első sor kiirása
 		
-		teddBeAfileBa(sheet, rowIndex++, lines2.get(0));
-		teddBeAfileBa(sheetUres, rowIndexUres++, lines2.get(0));
-		teddBeAfileBa(sheetEmail, rowIndexEmail++, lines2.get(0));
-		teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, lines2.get(0));
+		mobilM = teddBeAfileBa(sheet, rowIndex++, lines2.get(0), mobilM);
+		uresM = teddBeAfileBa(sheetUres, rowIndexUres++, lines2.get(0), uresM);
+		emailM = teddBeAfileBa(sheetEmail, rowIndexEmail++, lines2.get(0), emailM);
+		vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, lines2.get(0), vezetekesM);
 		
 		
 		for (int i = 1; i < lines2.size(); ++i) {
@@ -588,20 +608,21 @@ public final class FileOperator {
 		if (i == 0 || lines2.get(i).getSMS_SENT_TO().equals("")) {
 					
 					LineFromOTGSMSExcel ln = lines2.get(i);
+					csvT += ln.getIKTSZ() + ";HIB;X\n";
 					
 					if (!ln.getPhone1().equals("")) { // ha mobil
 						
-						teddBeAfileBa(sheet, rowIndex++, ln);
+						mobilM = teddBeAfileBa(sheet, rowIndex++, ln, mobilM);
 					} else if (ln.getADE().equals("") && ln.getPhone2().equals("")) { // ha üres
-						teddBeAfileBa(sheetUres, rowIndexUres++, ln);
+						uresM = teddBeAfileBa(sheetUres, rowIndexUres++, ln, uresM);
 					} else if (!ln.getADE().equals("") && !ln.getPhone2().equals("")) { // ha mindkettő
-						teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln);
+						vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln, vezetekesM);
 						
 					} else if (!ln.getADE().equals("")) { // ha emailja van csak
 						
-						teddBeAfileBa(sheetEmail, rowIndexEmail++, ln);
+						emailM = teddBeAfileBa(sheetEmail, rowIndexEmail++, ln, emailM);
 					} else {
-						teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln);
+						vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln, vezetekesM);
 					}
 			
 				}
@@ -610,16 +631,22 @@ public final class FileOperator {
 		
 		System.out.println("dobozos csomag");
 		
-	
+		//System.out.println(mobilM + "ez aaz");
 		  
 		
-		kiiratasFileba(mobiljaVan, workbook);
+		kiiratasFileba(mobiljaVan, workbook, mobilM, mobiljaVanTxt);
 		  
-		  kiiratasFileba(vezetekesSzamaVan, workbookVezetekes);
+		  kiiratasFileba(vezetekesSzamaVan, workbookVezetekes, vezetekesM, vezetekesSzamaVanTxt);
 		  
-		  kiiratasFileba(emailCimeVan, workbookEmail);
+		  kiiratasFileba(emailCimeVan, workbookEmail, emailM, emailCimeVanTxt);
 		  
-		 kiiratasFileba(ures, workbookUres);
+		 kiiratasFileba(ures, workbookUres, uresM, uresTxt);
+		 
+		 	int scvLast = csvT.length() -1 ;
+		 
+			BufferedWriter br = new BufferedWriter(new FileWriter(csv));
+			br.write(csvT.substring(0, scvLast));
+			br.close();
 		  
 	}
 	
@@ -627,7 +654,7 @@ public final class FileOperator {
 	
 	
 	
-	private static void kiiratasFileba(String string, XSSFWorkbook workbook) throws IOException {
+	private static void kiiratasFileba(String string, XSSFWorkbook workbook, String mit, String hova) throws IOException {
 		// TODO Auto-generated method stub
 		
 		
@@ -639,11 +666,19 @@ public final class FileOperator {
 		  workbook.close();
 		  
 		  excelFile.close();
+		  
+		  
+		  //File file = new File(hova);
+			BufferedWriter br = new BufferedWriter(new FileWriter(hova));
+			br.write(mit);
+			br.close();
+			
+	
 		
 		
 	}
 
-	public static void teddBeAfileBa(XSSFSheet sheet, int rowIndex, LineFromOTGSMSExcel lines2) {
+	public static String teddBeAfileBa(XSSFSheet sheet, int rowIndex, LineFromOTGSMSExcel lines2, String txt) {
 		
 		
 		Row row = sheet.createRow(rowIndex);
@@ -678,6 +713,38 @@ public final class FileOperator {
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getName());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getPhone1());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getPhone2());
+				
+				
+				txt += 	lines2.getIKTSZ()+ "\t" + 
+						lines2.getACCOUNT_NUMBER()+ "\t" + 
+						lines2.getCONTACT_TYPE()+ "\t" + 
+						lines2.getSUBJECT()+ "\t" + 
+						lines2.getSTATUSZ()+ "\t" + 
+						lines2.getINDITAS()+ "\t" + 
+						lines2.getINDITAS_NAPJA()+ "\t" + 
+						lines2.getLEZARAS_NAPJA()+ "\t" + 
+						lines2.getNemo_OTG_ID()+ "\t" + 
+						lines2.getINTERFACE_ID() + "\t" + 
+						lines2.getOTG_STATUS_DATE()+ "\t" + 
+						lines2.getOTG_CLOSED()+ "\t" + 
+						lines2.getSTART_TIME()+ "\t" + 
+						lines2.getEND_TIME()+ "\t" + 
+						lines2.getSMS_SENT_TO()+ "\t" + 
+						lines2.getOtthoni1()+ "\t" + 
+						lines2.getOtthoni2()+ "\t" + 
+						lines2.getMobil1()+ "\t" + 
+						lines2.getMobil2()+ "\t" + 
+						lines2.getBusiness()+ "\t" + 
+						lines2.getMunkahelyi()+ "\t" + 
+						lines2.getADE()+ "\t" + 
+						lines2.getOtgendDay()+ "\t" + 
+						lines2.getName()+ "\t" + 
+						lines2.getPhone1()+ "\t" + 
+						lines2.getPhone2()+ "\n";
+				
+				//System.out.println(txt);
+				
+				return txt;
 		
 	}
 	
