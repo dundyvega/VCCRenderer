@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -523,17 +525,17 @@ public final class FileOperator {
 		String vezetekesSzamaVan = fileName + "OTG - " + formatter.format(date) + " Vezetekes.xlsx";
 		String ures = fileName + "OTG - " + formatter.format(date) + " Ures.xlsx";
 		
-		String csv = fileName + "OTG - " + formatter.format(date) + ".txt";
-		String csvT = "";
+		//String csv = fileName + "OTG - " + formatter.format(date) + ".txt";
+		//String csvT = "";
 		
 		
 		//
 		// txt fájlok
 		
-		String mobiljaVanTxt = fileName + "OTG - " + formatter.format(date) + " Mobil SMS.txt";
-		String emailCimeVanTxt = fileName + "OTG - " + formatter.format(date) + " Email.txt";
-		String vezetekesSzamaVanTxt = fileName + "OTG - " + formatter.format(date) + " Vezetekes.txt";
-		String uresTxt = fileName + "OTG - " + formatter.format(date) + " Ures.txt";
+		String mobiljaVanTxt = fileName + "OTG SMS - unicode/OTG - " + formatter.format(date) + " Mobil SMS.txt";
+		String emailCimeVanTxt = fileName + "OTG Email - unicode/OTG - " + formatter.format(date) + " Email.txt";
+		String vezetekesSzamaVanTxt = fileName + "OTG Vezetekes tel - unicode/OTG - " + formatter.format(date) + " Vezetekes.txt";
+		String uresTxt = fileName + "OTG Ures - unicode/OTG - " + formatter.format(date) + " Ures.txt";
 		
 		String mobilM = "";
 		String emailM = "";
@@ -608,7 +610,7 @@ public final class FileOperator {
 		if (i == 0 || lines2.get(i).getSMS_SENT_TO().equals("")) {
 					
 					LineFromOTGSMSExcel ln = lines2.get(i);
-					csvT += ln.getIKTSZ() + ";HIB;X\n";
+					//csvT += ln.getIKTSZ() + ";HIB;X\n";
 					
 					if (!ln.getPhone1().equals("")) { // ha mobil
 						
@@ -642,11 +644,11 @@ public final class FileOperator {
 		  
 		 kiiratasFileba(ures, workbookUres, uresM, uresTxt);
 		 
-		 	int scvLast = csvT.length() -1 ;
+		 	/*int scvLast = csvT.length() -1 ;
 		 
 			BufferedWriter br = new BufferedWriter(new FileWriter(csv));
 			br.write(csvT.substring(0, scvLast));
-			br.close();
+			br.close();*/
 		  
 	}
 	
@@ -669,7 +671,10 @@ public final class FileOperator {
 		  
 		  
 		  //File file = new File(hova);
-			BufferedWriter br = new BufferedWriter(new FileWriter(hova));
+		  
+		  //mit += "\u001a";
+		  
+			BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(hova, true), StandardCharsets.UTF_8));
 			br.write(mit);
 			br.close();
 			
@@ -740,7 +745,7 @@ public final class FileOperator {
 						lines2.getOtgendDay()+ "\t" + 
 						lines2.getName()+ "\t" + 
 						lines2.getPhone1()+ "\t" + 
-						lines2.getPhone2()+ "\n";
+						lines2.getPhone2()+ System.lineSeparator();
 				
 				//System.out.println(txt);
 				

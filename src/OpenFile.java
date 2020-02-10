@@ -121,8 +121,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		btnVCC.setEnabled(false);
-		btnVCC.setVisible(false);
+		//btnVCC.setEnabled(false);
+		//btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
