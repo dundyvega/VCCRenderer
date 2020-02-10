@@ -40,6 +40,10 @@ public class OpenFile {
 	private String[] uresMappak;
 	private String[] uresFajlokVege;
 	private String[] nemKizart;
+	private String mobilXlsX;
+	private String mobilTxt;
+	private String masXLSX;
+	private String maxTxt;
 
 	/**
 	 * Launch the application.
@@ -73,6 +77,11 @@ public class OpenFile {
 				words = br.readLine().split("=")[1].split(",");
 				legordulo= br.readLine().split("=")[1].split(",");
 				nemKizart=br.readLine().split(":")[1].split("\\|\\|");
+				
+				mobilXlsX = br.readLine().split("=")[1];
+				mobilTxt = br.readLine().split("=")[1];
+				masXLSX =  br.readLine().split("=")[1];
+				maxTxt = br.readLine().split("=")[1];
 				
 				
 				
@@ -121,8 +130,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		//btnVCC.setEnabled(false);
-		//btnVCC.setVisible(false);
+		btnVCC.setEnabled(false);
+		btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -273,7 +282,15 @@ public class OpenFile {
 			            	  
 			            	  phone2();
 			            	  
-			            	  FileOperator.setLines2(fileName, lines2);
+			            	  
+			            	  /**
+			            	   * mobilXlsX = br.readLine().split("=")[1];
+								mobilTxt = br.readLine().split("=")[1];
+								masXLSX =  br.readLine().split("=")[1];
+								maxTxt = br.readLine().split("=")[1];
+			            	   */
+			            	  
+			            	  FileOperator.setLines2(mobilXlsX, mobilTxt, masXLSX, maxTxt, lines2);
 			            	 
 			            	// FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
 			            	  
