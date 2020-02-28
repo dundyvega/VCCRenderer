@@ -28,6 +28,8 @@ public class LineFromOTGSMSExcel implements Comparable {
 	private String name;
 	private String phone1;
 	private String phone2;
+	private String w;
+	
 	public String getUres() {
 		return ures;
 	}
@@ -204,6 +206,12 @@ public class LineFromOTGSMSExcel implements Comparable {
 	}
 	public void setPhone2(String phone2) {
 		this.phone2 = phone2;
+	}
+	public String getW() {
+		return w;
+	}
+	public void setW(String w) {
+		this.w = w;
 	}
 
 

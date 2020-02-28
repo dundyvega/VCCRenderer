@@ -1,5 +1,5 @@
 
-public class LineFromExcelFile {
+public class LineFromExcelFile implements Comparable {
 	private String account_number;
 	private String iktato;
 	private String erintett_szolgaltatasok;
@@ -25,6 +25,7 @@ public class LineFromExcelFile {
 	private String VUI;
 	private String megjegyzes_2;
 	private String phone3;
+	private boolean hossztNez = false;
 	
 	
 	public int mezoIndexVissza(String s) {
@@ -293,6 +294,54 @@ public class LineFromExcelFile {
 				+ " " +  VUI
 				+ " " +  megjegyzes_2
 				+ " " +  phone3;
+	}
+
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		
+		LineFromExcelFile fl = (LineFromExcelFile)(arg0);
+		
+		// két fajta rendezést végez
+		
+		if (hossztNez) {
+			//System.out.println("kacsa");
+			
+			Integer l1 = this.getMegjegyzes_2().length();
+			Integer l2 = fl.getMegjegyzes_2().length();
+			return l1.compareTo(l2);
+			
+			
+			
+			
+		} else {
+			
+			try {
+			Integer t1 = Integer.parseInt(this.getAccount_number());
+			Integer t2 = Integer.parseInt(((LineFromExcelFile)arg0).getAccount_number());
+			
+			return t1.compareTo(t2);
+			
+		}catch (Exception ex) {
+		return ((LineFromExcelFile)(arg0)).getAccount_number().compareTo(this.getAccount_number());
+		}
+		}
+		
+
+	}
+
+
+	public boolean isHossztNez() {
+		return hossztNez;
+	}
+
+
+	public void setHossztNez(boolean hossztNez) {
+		// megjegyzés hossza szerint szeretnénk rendezni
+
+		
+		this.hossztNez = hossztNez;
 	}
 
 }

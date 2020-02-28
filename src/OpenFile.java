@@ -44,6 +44,7 @@ public class OpenFile {
 	private String mobilTxt;
 	private String masXLSX;
 	private String maxTxt;
+	private ArrayList<LineFromExcelFile> duplaUgyek;
 
 	/**
 	 * Launch the application.
@@ -130,8 +131,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		btnVCC.setEnabled(false);
-		btnVCC.setVisible(false);
+		//btnVCC.setEnabled(false);
+		//btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -185,6 +186,8 @@ public class OpenFile {
 			            	  
 			            	 // System.out.println("itt már nem jó");
 			            	  
+			            	  duplaugyekKiszedese();
+			            	  
 			            	  felbontas();
 			            	  lines = normUgyek;
 			            	  
@@ -219,6 +222,44 @@ public class OpenFile {
 			              }
 			        }
 				 
+			}
+
+			private void duplaugyekKiszedese() {
+				// TODO Auto-generated method stub
+				
+				Collections.sort(lines);
+				duplaUgyek = new ArrayList<LineFromExcelFile>();
+				//duplaUgyek.add(lines.get(0));
+				
+				for (int i = 1; i < lines.size() - 1; ++i) {
+					if (lines.get(i).getAccount_number().equals(lines.get(i+1).getAccount_number())) {
+						
+						if (!duplaUgyek.contains(lines.get(i))) {
+							duplaUgyek.add(lines.get(i));
+						}
+						
+						if (!duplaUgyek.contains(lines.get(i+1))) {
+							duplaUgyek.add(lines.get(i+1));
+						}
+						
+						System.out.println("dupla: " + lines.get(i).getAccount_number());
+					}
+					
+				}
+				
+				ArrayList<LineFromExcelFile> masUgy = new ArrayList<LineFromExcelFile>();
+				masUgy.add(lines.get(0));
+				
+				for (int i = 1; i < lines.size(); ++i) {
+					if (!duplaUgyek.contains(lines.get(i))) {
+						masUgy.add(lines.get(i));
+					}
+				}
+				
+				lines = masUgy;
+				
+				
+				
 			}
 
 		});
@@ -588,7 +629,7 @@ public class OpenFile {
 		// TODO Auto-generated method stub
 		
 		for (int i = 1; i < lines.size(); ++i) {
-			
+			////if (lines.get(i).getMegjegyzes_2().equals("") && ! lines.get(i).getMeg)
 			lines.get(i).setMegjegyzes(lines.get(i).getMegjegyzes_2());
 			
 		}
@@ -602,18 +643,25 @@ public class OpenFile {
 		
 		husszuUgyek = new ArrayList<LineFromExcelFile>();
 		normUgyek = new ArrayList<LineFromExcelFile>();
+		//duplaUgyek = new ArrayList<LineFromExcelFile>();
 		
 		husszuUgyek.add(lines.get(0));
 		normUgyek.add(lines.get(0));
 		
 		for (int i = 1; i < lines.size(); ++i) {
 			
-			if (isHosszu(lines.get(i))) {
-				husszuUgyek.add(lines.get(i));
-			} else {
-				normUgyek.add(lines.get(i));
-			}
+			if (!lines.get(i).equals(lines.get(i - 1)))
+				if (isHosszu(lines.get(i))) {
+					husszuUgyek.add(lines.get(i));
+				} else {
+					normUgyek.add(lines.get(i));
+				}
 			
+			
+		}
+		
+		for (int i = 0; i < duplaUgyek.size(); ++i) {
+			husszuUgyek.add(duplaUgyek.get(i));
 		}
 		
 	}
@@ -740,21 +788,21 @@ public class OpenFile {
 			
 			String a1 = a.split("&&")[0];
 			
-			System.out.println("a1 " +a1);
+			//System.out.println("a1 " +a1);
 			
 			String a2 = a.split("&&")[1];
 			
-			System.out.println("a2" + a2);
+			//System.out.println("a2" + a2);
 			
 			String b = nemKizart[i].split("~")[1];
 			
 			String b1 = b.split("&&")[0];
 			
-			System.out.println("b1 " + b1);
+			//System.out.println("b1 " + b1);
 			
 			String b2 = b.split("&&")[1];
 			
-			System.out.println("b2: " + b2);
+			//System.out.println("b2: " + b2);
 			
 			//System.out.println(a1 + " " + a2 + " " + b1 + " " + b2);
 			

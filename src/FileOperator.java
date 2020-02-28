@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -267,6 +268,25 @@ public final class FileOperator {
 		string = folder + "/" + string;
 		//System.out.println(string);
 		
+		hosszComparable(lines);
+		
+		ArrayList<LineFromExcelFile> ln1 = new ArrayList<LineFromExcelFile>();
+		
+		for (int i = 1; i < lines.size(); ++i) {
+			ln1.add(lines.get(i));
+		}
+		
+		 Collections.sort(ln1, Collections.reverseOrder());
+		 
+		 ArrayList<LineFromExcelFile> ln2 = new ArrayList<LineFromExcelFile>();
+		 
+		 ln2.add(lines.get(0));
+		 for (int i = 0; i < ln1.size(); ++i) {
+			 ln2.add(ln1.get(i));
+		 }
+		
+		 lines = ln2;
+		
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("data");
@@ -332,6 +352,17 @@ public final class FileOperator {
 	
 
 	
+	private static void hosszComparable(ArrayList<LineFromExcelFile> lines) {
+		// TODO Auto-generated method stub
+		
+		for (int i = 0; i < lines.size(); ++i) {
+			lines.get(i).setHossztNez(true);
+		}
+		
+		
+		
+	}
+
 	/*
 	 * Létrehozza az üres fájlokat
 	 */
@@ -391,33 +422,34 @@ public final class FileOperator {
 			//line.setUres(cellStringValue(currentRow.getCell(0)));
 			line.setIKTSZ(cellStringValue(currentRow.getCell(0)));
 			line.setACCOUNT_NUMBER(cellStringValue(currentRow.getCell(1)));
-			line.setCONTACT_TYPE(cellStringValue(currentRow.getCell(2)));
-			line.setSUBJECT(cellStringValue(currentRow.getCell(3)));
-			line.setSTATUSZ(cellStringValue(currentRow.getCell(4)));
-			line.setINDITAS(cellStringValue(currentRow.getCell(5)));
-			line.setINDITAS_NAPJA(cellStringValue(currentRow.getCell(6)));
-			line.setLEZARAS_NAPJA(cellStringValue(currentRow.getCell(7)));
-			line.setNemo_OTG_ID(cellStringValue(currentRow.getCell(8)));
-			line.setINTERFACE_ID(cellStringValue(currentRow.getCell(9)));
-			line.setOTG_STATUS_DATE(cellStringValue(currentRow.getCell(10)));
-			line.setOTG_CLOSED(cellStringValue(currentRow.getCell(11)));
-			line.setSTART_TIME(cellStringValue(currentRow.getCell(12)));
-			line.setEND_TIME(cellStringValue(currentRow.getCell(13)));
-			line.setSMS_SENT_TO(cellStringValue(currentRow.getCell(14)));
-			line.setOtthoni1(cellStringValue(currentRow.getCell(15)));
-			line.setOtthoni2(cellStringValue(currentRow.getCell(16)));
-			line.setMobil1(cellStringValue(currentRow.getCell(17)));
-			line.setMobil2(cellStringValue(currentRow.getCell(18)));
-			line.setBusiness(cellStringValue(currentRow.getCell(19)));
-			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
-			line.setADE(cellStringValue(currentRow.getCell(21)));
+			line.setW(cellStringValue(currentRow.getCell(2)));
+			line.setCONTACT_TYPE(cellStringValue(currentRow.getCell(3)));
+			line.setSUBJECT(cellStringValue(currentRow.getCell(4)));
+			line.setSTATUSZ(cellStringValue(currentRow.getCell(5)));
+			line.setINDITAS(cellStringValue(currentRow.getCell(6)));
+			line.setINDITAS_NAPJA(cellStringValue(currentRow.getCell(7)));
+			line.setLEZARAS_NAPJA(cellStringValue(currentRow.getCell(8)));
+			line.setNemo_OTG_ID(cellStringValue(currentRow.getCell(9)));
+			line.setINTERFACE_ID(cellStringValue(currentRow.getCell(10)));
+			line.setOTG_STATUS_DATE(cellStringValue(currentRow.getCell(11)));
+			line.setOTG_CLOSED(cellStringValue(currentRow.getCell(12)));
+			line.setSTART_TIME(cellStringValue(currentRow.getCell(13)));
+			line.setEND_TIME(cellStringValue(currentRow.getCell(14)));
+			line.setSMS_SENT_TO(cellStringValue(currentRow.getCell(15)));
+			line.setOtthoni1(cellStringValue(currentRow.getCell(16)));
+			line.setOtthoni2(cellStringValue(currentRow.getCell(17)));
+			line.setMobil1(cellStringValue(currentRow.getCell(18)));
+			line.setMobil2(cellStringValue(currentRow.getCell(19)));
+			line.setBusiness(cellStringValue(currentRow.getCell(20)));
+			line.setMunkahelyi(cellStringValue(currentRow.getCell(21)));
+			line.setADE(cellStringValue(currentRow.getCell(22)));
 			line.setPhone1("");
 			line.setPhone2("");
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
 			
-			//System.out.println(line.toString());	
+			//System.out.println(line.getW() + line.getACCOUNT_NUMBER());	
 			
 			lines.add(line);
 			
@@ -484,7 +516,7 @@ public final class FileOperator {
 			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
 			line.setADE(cellStringValue(currentRow.getCell(21)));
 			
-			System.out.println(line.getADE() + "Ade");
+			//System.out.println(line.getADE() + "Ade");
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
@@ -492,6 +524,8 @@ public final class FileOperator {
 			//System.out.println(line.toString());	
 			
 			lines.add(line);
+			
+			System.out.println(line.getW());
 			
 			//System.out.println(line.toString());
 			
@@ -515,6 +549,8 @@ public final class FileOperator {
 
 	public static void setLines2(String mobilXLXS, String mobilTxt, String masXLSX, String maxTxt, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
 		// TODO Auto-generated method stub
+		
+		//System.out.println(lines2.get(0).getW());
 		
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd HH 'óra'");
@@ -603,7 +639,7 @@ public final class FileOperator {
 		
 		/*fájlok létrehozva */
 		
-		
+		System.out.println("itt");
 		
 		XSSFWorkbook workbookMas = new XSSFWorkbook();
 		XSSFSheet sheetMas = workbookMas.createSheet("data");
@@ -617,6 +653,8 @@ public final class FileOperator {
 		lines2.get(0).setOtgendDay("OTGEndDay");
 		
 		//első sor kiirása
+		
+		System.out.println(lines2.get(0).getW() + " sfdsfd");
 		
 		mobilM = teddBeAfileBa(sheet, rowIndex++, lines2.get(0), mobilM);
 		mas = teddBeAfileBa(sheetMas, rowIndexMas++, lines2.get(0), mas);
@@ -655,7 +693,7 @@ public final class FileOperator {
 			}
 		}
 		
-		System.out.println("dobozos csomag");
+	//	System.out.println("dobozos csomag");
 		
 		//System.out.println(mobilM + "ez aaz");
 		  
@@ -718,9 +756,12 @@ public final class FileOperator {
 		int cellIndex = 0;
 		
 		
+		//System.out.println(lines2.getW());
+		
 		//Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
-		Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getIKTSZ());
+				Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getIKTSZ());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getACCOUNT_NUMBER());
+				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getW());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getCONTACT_TYPE());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSUBJECT());
 				cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getSTATUSZ());
@@ -749,6 +790,7 @@ public final class FileOperator {
 				
 				txt += 	lines2.getIKTSZ()+ "\t" + 
 						lines2.getACCOUNT_NUMBER()+ "\t" + 
+						lines2.getW() + "\t" + 
 						lines2.getCONTACT_TYPE()+ "\t" + 
 						lines2.getSUBJECT()+ "\t" + 
 						lines2.getSTATUSZ()+ "\t" + 
