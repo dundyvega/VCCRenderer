@@ -547,7 +547,7 @@ public final class FileOperator {
 	
 	
 
-	public static void setLines2(String mobilXLXS, String mobilTxt, String masXLSX, String maxTxt, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
+	public static void setLines2(String mobilXLXS, String mobilTxt, String masXLSX, String maxTxt, String vezetekesXLSX, String vezetekesTxt, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
 		// TODO Auto-generated method stub
 		
 		//System.out.println(lines2.get(0).getW());
@@ -563,9 +563,12 @@ public final class FileOperator {
 		String masVan = masXLSX + "OTG -" + formatter.format(date) + " Nincs Mobil.xlsx";
 		String masVanTxt = maxTxt + "OTG -" + formatter.format(date) + " Nincs Mobil.txt";
 		
+		String vezetekesVan = vezetekesXLSX + "OTG - " + formatter.format(date) + " vezetekes.xlsx";
+		String vezetekesVanTxt = vezetekesTxt + "OTG - " + formatter.format(date) + " vezetekes.txt";
+ 		
 		
 		//fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
-		/*
+		/*OTG_Lezaras_panasz_erintett
 		String mobiljaVan = fileName + "OTG -" + formatter.format(date) + " Mobil SMS.xlsx";
 		String emailCimeVan = fileName + "OTG - " + formatter.format(date) + " Email.xlsx";
 		String vezetekesSzamaVan = fileName + "OTG - " + formatter.format(date) + " Vezetekes.xlsx";
@@ -593,6 +596,7 @@ public final class FileOperator {
 		*/
 		String mas = "";
 		String mobilM = "";
+		String vezetekesM = "";
 		
 		
 		//System.out.println(fileName);
@@ -647,6 +651,12 @@ public final class FileOperator {
 		int rowIndexMas = 0;
 		int cellIndexMas;
 		
+		XSSFWorkbook workbookVezetekes = new XSSFWorkbook();
+		XSSFSheet sheetVezetekes = workbookVezetekes.createSheet("data");
+		
+		int rowIndexVezetekes = 0;
+		int cellIndexVezetekes;
+		
 		
 		lines2.get(0).setName("name");
 		lines2.get(0).setPhone1("phone1");
@@ -654,10 +664,11 @@ public final class FileOperator {
 		
 		//első sor kiirása
 		
-		System.out.println(lines2.get(0).getW() + " sfdsfd");
+		//System.out.println(lines2.get(0).getW() + " sfdsfd");
 		
 		mobilM = teddBeAfileBa(sheet, rowIndex++, lines2.get(0), mobilM);
 		mas = teddBeAfileBa(sheetMas, rowIndexMas++, lines2.get(0), mas);
+		vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, lines2.get(0), vezetekesM);
 		//emailM = teddBeAfileBa(sheetEmail, rowIndexEmail++, lines2.get(0), emailM);
 		//vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, lines2.get(0), vezetekesM);
 		
@@ -680,13 +691,13 @@ public final class FileOperator {
 					} else if (ln.getADE().equals("") && ln.getPhone2().equals("")) { // ha üres
 						mas = teddBeAfileBa(sheetMas, rowIndexMas++, ln, mas);
 					} else if (!ln.getADE().equals("") && !ln.getPhone2().equals("")) { // ha mindkettő
-						mas = teddBeAfileBa(sheetMas, rowIndexMas++, ln, mas);
+						vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln, vezetekesM);
 						
 					} else if (!ln.getADE().equals("")) { // ha emailja van csak
 						
 						mas = teddBeAfileBa(sheetMas, rowIndexMas++, ln, mas);
 					} else {
-						mas = teddBeAfileBa(sheetMas, rowIndexMas++, ln, mas);
+						vezetekesM = teddBeAfileBa(sheetVezetekes, rowIndexVezetekes++, ln, vezetekesM);
 					}
 			
 				}
@@ -705,6 +716,8 @@ public final class FileOperator {
 		  //kiiratasFileba(emailCimeVan, workbookEmail, emailM, emailCimeVanTxt);
 		  
 		kiiratasFileba(masVan, workbookMas, mas, masVanTxt);
+		
+		kiiratasFileba(vezetekesVan, workbookVezetekes, vezetekesM, vezetekesVanTxt);
 		 
 		 	/*int scvLast = csvT.length() -1 ;
 		 
@@ -721,8 +734,8 @@ public final class FileOperator {
 	private static void kiiratasFileba(String string, XSSFWorkbook workbook, String mit, String hova) throws IOException {
 		// TODO Auto-generated method stub
 		
-		//System.out.println(hova);
-		//System.out.println(string);
+		System.out.println(hova);
+		System.out.println(string);
 		
 		
 		FileOutputStream excelFile = new FileOutputStream(string);

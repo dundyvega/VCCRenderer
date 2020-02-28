@@ -45,6 +45,8 @@ public class OpenFile {
 	private String masXLSX;
 	private String maxTxt;
 	private ArrayList<LineFromExcelFile> duplaUgyek;
+	private String vezetekes;
+	private String vezetekes1;
 
 	/**
 	 * Launch the application.
@@ -83,6 +85,9 @@ public class OpenFile {
 				mobilTxt = br.readLine().split("=")[1];
 				masXLSX =  br.readLine().split("=")[1];
 				maxTxt = br.readLine().split("=")[1];
+				
+				vezetekes = br.readLine().split("=")[1];
+				vezetekes1 = br.readLine().split("=")[1];
 				
 				
 				
@@ -131,8 +136,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		//btnVCC.setEnabled(false);
-		//btnVCC.setVisible(false);
+		btnVCC.setEnabled(false);
+		btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -329,9 +334,11 @@ public class OpenFile {
 								mobilTxt = br.readLine().split("=")[1];
 								masXLSX =  br.readLine().split("=")[1];
 								maxTxt = br.readLine().split("=")[1];
+								vezetekes = br.readLine().split("=")[1];
+								vezetekes1 = br.readLine().split("=")[1];
 			            	   */
 			            	  
-			            	  FileOperator.setLines2(mobilXlsX, mobilTxt, masXLSX, maxTxt, lines2);
+			            	  FileOperator.setLines2(mobilXlsX, mobilTxt, masXLSX, maxTxt, vezetekes, vezetekes1, lines2);
 			            	 
 			            	// FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
 			            	  
