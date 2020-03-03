@@ -47,6 +47,8 @@ public class OpenFile {
 	private ArrayList<LineFromExcelFile> duplaUgyek;
 	private String vezetekes;
 	private String vezetekes1;
+	private String masHetvege;
+	private String masHetvege1;
 
 	/**
 	 * Launch the application.
@@ -89,6 +91,8 @@ public class OpenFile {
 				vezetekes = br.readLine().split("=")[1];
 				vezetekes1 = br.readLine().split("=")[1];
 				
+				masHetvege = br.readLine().split("=")[1];
+				masHetvege1 = br.readLine().split("=")[1];
 				
 				
 				
@@ -338,7 +342,7 @@ public class OpenFile {
 								vezetekes1 = br.readLine().split("=")[1];
 			            	   */
 			            	  
-			            	  FileOperator.setLines2(mobilXlsX, mobilTxt, masXLSX, maxTxt, vezetekes, vezetekes1, lines2);
+			            	  FileOperator.setLines2(mobilXlsX, mobilTxt, masXLSX, maxTxt, vezetekes, vezetekes1, masHetvege, masHetvege1, lines2);
 			            	 
 			            	// FileOperator.setLines(chooser.getSelectedFile().getPath(), lines);
 			            	  

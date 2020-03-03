@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -43,31 +45,31 @@ public final class FileOperator {
 			if (!HSSFDateUtil.isCellDateFormatted(cell)) {
 				
 				str = NumberToTextConverter.toText(cell.getNumericCellValue());
-				//System.out.println("semmi");
+				////System.out.println("semmi");
 			} else {
 				
 				DateFormat df = new SimpleDateFormat("yyy/MM/dd");
 				str = df.format(cell.getDateCellValue());
-				//System.out.println("semmi");
+				////System.out.println("semmi");
 			}
 			
 		} else if (cell.getCellType() == CellType.ERROR) {
 			str = "error" + "";
-			//System.out.println("semmi");
-			//System.out.println("error");
+			////System.out.println("semmi");
+			////System.out.println("error");
 			
 		} else
 			
 			if (cell.getCellType() == CellType.STRING && !cell.getStringCellValue().equals("") && cell.getStringCellValue() != null) {
 		
-				//System.out.println("semmi");	
+				////System.out.println("semmi");	
 				
 			str = cell.getStringCellValue();
 			
 		}
 		} 
 		
-		//System.out.println(str);
+		////System.out.println(str);
 	
 		return str;
 	
@@ -121,21 +123,21 @@ public final class FileOperator {
 			line.setANGOL(cellStringValue(currentRow.getCell(21)));
 			line.setVUI(cellStringValue(currentRow.getCell(22)));
 			line.setMegjegyzes_2(cellStringValue(currentRow.getCell(23)));
-			//System.out.println(line.getName());
+			////System.out.println(line.getName());
 			line.setPhone3(cellStringValue(currentRow.getCell(24)));
 			
-			//System.out.println(line.toString());	
+			////System.out.println(line.toString());	
 			
 			lines.add(line);
 			
 		
 			
-			//System.out.println(line.toString());
-		//System.out.println(line.getName());
+			////System.out.println(line.toString());
+		////System.out.println(line.getName());
 			
 		}
 		
-		//System.out.println("valami");
+		////System.out.println("valami");
 		
 		workbook.close();
 		
@@ -264,9 +266,9 @@ public final class FileOperator {
 		// TODO Auto-generated method stub
 		
 		string = string.split("\\.")[0] + " - Automata IVR.xlsx";
-		//System.out.println(string);
+		////System.out.println(string);
 		string = folder + "/" + string;
-		//System.out.println(string);
+		////System.out.println(string);
 		
 		hosszComparable(lines);
 		
@@ -376,7 +378,7 @@ public final class FileOperator {
 		for (int i = 0; i < uresMappak.length; ++i) {
 			
 			String string = folder + "/" + uresMappak[i] + dat + uresFajlokVege[i];
-			//System.out.println(string);
+			////System.out.println(string);
 			
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet sheet = workbook.createSheet("data");
@@ -449,15 +451,15 @@ public final class FileOperator {
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
 			
-			//System.out.println(line.getW() + line.getACCOUNT_NUMBER());	
+			////System.out.println(line.getW() + line.getACCOUNT_NUMBER());	
 			
 			lines.add(line);
 			
-			//System.out.println(line.toString());
+			////System.out.println(line.toString());
 			
 		}
 		
-		//System.out.println("valami");
+		////System.out.println("valami");
 		
 		workbook.close();
 		
@@ -478,7 +480,7 @@ public final class FileOperator {
 		Sheet datatypeSheet = (Sheet) workbook.getSheetAt(0);
 		Iterator<Row> iterator = datatypeSheet.iterator();
 
-		//System.out.println("Itt még ok");
+		////System.out.println("Itt még ok");
 		
 		//adatok kiolvasása
 		while (iterator.hasNext()) {
@@ -516,22 +518,22 @@ public final class FileOperator {
 			line.setMunkahelyi(cellStringValue(currentRow.getCell(20)));
 			line.setADE(cellStringValue(currentRow.getCell(21)));
 			
-			//System.out.println(line.getADE() + "Ade");
+			////System.out.println(line.getADE() + "Ade");
 			//line.setOtgendDay(cellStringValue(currentRow.getCell(22)));
 			//line.setName(cellStringValue(currentRow.getCell(23)));
 			//line.setPhone1(cellStringValue(currentRow.getCell(24)));
 			
-			//System.out.println(line.toString());	
+			////System.out.println(line.toString());	
 			
 			lines.add(line);
 			
-			System.out.println(line.getW());
+			//System.out.println(line.getW());
 			
-			//System.out.println(line.toString());
+			////System.out.println(line.toString());
 			
 		}
 		
-		//System.out.println("valami");
+		////System.out.println("valami");
 		
 		workbook.close();
 		
@@ -547,24 +549,53 @@ public final class FileOperator {
 	
 	
 
-	public static void setLines2(String mobilXLXS, String mobilTxt, String masXLSX, String maxTxt, String vezetekesXLSX, String vezetekesTxt, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
+	public static void setLines2(String mobilXLXS, String mobilTxt, String masXLSX, String maxTxt, String vezetekesXLSX, String vezetekesTxt, String masHetvege, String masHetvege1, ArrayList<LineFromOTGSMSExcel> lines2) throws IOException {
 		// TODO Auto-generated method stub
 		
-		//System.out.println(lines2.get(0).getW());
+		////System.out.println(lines2.get(0).getW());
 		
 		Date date = new Date(System.currentTimeMillis());
+		
+		
+		
+
+		
+		
 		SimpleDateFormat formatter = new SimpleDateFormat("YYY.MM.dd HH 'óra'");
 		
 		String mobiljaVan = mobilXLXS + "OTG -" + formatter.format(date) + " Mobil SMS.xlsx";
 		String mobiljaVanTxt = mobilTxt + "OTG -" + formatter.format(date) + " Mobil SMS.txt";
 		
-		//System.out.print("Ez lesz: " + mobilTxt);
+		////System.out.print("Ez lesz: " + mobilTxt);
 		
-		String masVan = masXLSX + "OTG -" + formatter.format(date) + " Nincs Mobil.xlsx";
-		String masVanTxt = maxTxt + "OTG -" + formatter.format(date) + " Nincs Mobil.txt";
+		String dayOfWeek = new SimpleDateFormat("EEE", Locale.ENGLISH).format(date);
+		////System.out.println(dayOfWeek);
+		
+		String masVan;
+		String masVanTxt;
+		
+		if (dayOfWeek.equals("Sun") || dayOfWeek.equals("Sat")) {
+			
+			 masVan = masHetvege + "OTG -" + formatter.format(date) + " Egyéb ügyek.xlsx";
+			 masVanTxt = masHetvege1 + "OTG -" + formatter.format(date) + " Egyéb ügyek.txt";
+			
+		} else {
+		
+			 masVan = masXLSX + "OTG -" + formatter.format(date) + " Egyéb ügyek.xlsx";
+			 masVanTxt = maxTxt + "OTG -" + formatter.format(date) + " Egyéb ügyek.txt";
+		}
 		
 		String vezetekesVan = vezetekesXLSX + "OTG - " + formatter.format(date) + " vezetekes.xlsx";
 		String vezetekesVanTxt = vezetekesTxt + "OTG - " + formatter.format(date) + " vezetekes.txt";
+		/*
+		try {
+			date = new SimpleDateFormat( "yyyyMMdd" ).parse( "20200307" );
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		
  		
 		
 		//fileName = fileName + "OTG -" + formatter.format(date) + ".xlsx";
@@ -599,7 +630,7 @@ public final class FileOperator {
 		String vezetekesM = "";
 		
 		
-		//System.out.println(fileName);
+		////System.out.println(fileName);
 		
 		
 		/* mobilos excel */
@@ -643,7 +674,7 @@ public final class FileOperator {
 		
 		/*fájlok létrehozva */
 		
-		System.out.println("itt");
+		//System.out.println("itt");
 		
 		XSSFWorkbook workbookMas = new XSSFWorkbook();
 		XSSFSheet sheetMas = workbookMas.createSheet("data");
@@ -664,7 +695,9 @@ public final class FileOperator {
 		
 		//első sor kiirása
 		
-		//System.out.println(lines2.get(0).getW() + " sfdsfd");
+		////System.out.println(lines2.get(0).getW() + " sfdsfd");
+		
+		lines2.get(0).setACCOUNT_NUMBER("account_number");
 		
 		mobilM = teddBeAfileBa(sheet, rowIndex++, lines2.get(0), mobilM);
 		mas = teddBeAfileBa(sheetMas, rowIndexMas++, lines2.get(0), mas);
@@ -704,9 +737,9 @@ public final class FileOperator {
 			}
 		}
 		
-	//	System.out.println("dobozos csomag");
+	//	//System.out.println("dobozos csomag");
 		
-		//System.out.println(mobilM + "ez aaz");
+		////System.out.println(mobilM + "ez aaz");
 		  
 		
 		kiiratasFileba(mobiljaVan, workbook, mobilM, mobiljaVanTxt);
@@ -734,8 +767,8 @@ public final class FileOperator {
 	private static void kiiratasFileba(String string, XSSFWorkbook workbook, String mit, String hova) throws IOException {
 		// TODO Auto-generated method stub
 		
-		System.out.println(hova);
-		System.out.println(string);
+		//System.out.println(hova);
+		//System.out.println(string);
 		
 		
 		FileOutputStream excelFile = new FileOutputStream(string);
@@ -769,7 +802,7 @@ public final class FileOperator {
 		int cellIndex = 0;
 		
 		
-		//System.out.println(lines2.getW());
+		////System.out.println(lines2.getW());
 		
 		//Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.get(i).getUres());
 				Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines2.getIKTSZ());
@@ -829,7 +862,7 @@ public final class FileOperator {
 						lines2.getPhone1()+ "\t" + 
 						lines2.getPhone2()+ System.lineSeparator();
 				
-				//System.out.println(txt);
+				////System.out.println(txt);
 				
 				return txt;
 		
