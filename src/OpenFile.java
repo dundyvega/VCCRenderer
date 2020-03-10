@@ -140,8 +140,8 @@ public class OpenFile {
 		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
-		btnVCC.setEnabled(false);
-		btnVCC.setVisible(false);
+		//btnVCC.setEnabled(false);
+		//btnVCC.setVisible(false);
 		
 		BufferedImage image = ImageIO.read(getClass().getResource("/img/Image.png"));
 		
@@ -187,6 +187,8 @@ public class OpenFile {
 			            	  
 			            	 // System.out.println("itt még jó");
 			            	  
+			            	  telefonszamokRenderelese();
+			            	  
 			            	  megjegyzesAtmasolasa();
 			            	  
 			            	  deletingItems();
@@ -213,7 +215,7 @@ public class OpenFile {
 			            		  System.out.println(husszuUgyek.get(i));
 			            	  }*/
 			            	  
-			            	  telefonszamokRenderelese();
+			            	 
 			            	 
 			            	 FileOperator.setLines(chooser.getSelectedFile().getParent(), chooser.getSelectedFile().getName(), 
 			            			 lines, husszuUgyek, uresMappak, uresFajlokVege, hosszu, legordulo);

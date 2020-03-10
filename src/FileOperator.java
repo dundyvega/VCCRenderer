@@ -574,15 +574,23 @@ public final class FileOperator {
 		String masVan;
 		String masVanTxt;
 		
-		if (dayOfWeek.equals("Sun") || dayOfWeek.equals("Sat")) {
+		
+
+		
+		if (dayOfWeek.equals("Sat") || dayOfWeek.equals("Sun")) {
 			
+			
+			 
+			
+			 
 			 masVan = masHetvege + "OTG -" + formatter.format(date) + " Egyéb ügyek.xlsx";
 			 masVanTxt = masHetvege1 + "OTG -" + formatter.format(date) + " Egyéb ügyek.txt";
 			
 		} else {
-		
+			
 			 masVan = masXLSX + "OTG -" + formatter.format(date) + " Egyéb ügyek.xlsx";
 			 masVanTxt = maxTxt + "OTG -" + formatter.format(date) + " Egyéb ügyek.txt";
+			 
 		}
 		
 		String vezetekesVan = vezetekesXLSX + "OTG - " + formatter.format(date) + " vezetekes.xlsx";
@@ -698,6 +706,7 @@ public final class FileOperator {
 		////System.out.println(lines2.get(0).getW() + " sfdsfd");
 		
 		lines2.get(0).setACCOUNT_NUMBER("account_number");
+		lines2.get(0).setIKTSZ("iktato");
 		
 		mobilM = teddBeAfileBa(sheet, rowIndex++, lines2.get(0), mobilM);
 		mas = teddBeAfileBa(sheetMas, rowIndexMas++, lines2.get(0), mas);
