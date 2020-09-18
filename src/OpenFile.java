@@ -18,15 +18,26 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
 public class OpenFile {
+	
+	
+	private String []vtvWords;
+	private String []VTVMove;
+	private String []VTVDeleting;
+	private String kimenetVTV;
+	private String kimenetNemVTV;
 
 	private JFrame frame;
 	private JButton btnVCC;
 	private JButton btnOTG;
 	private ArrayList<LineFromExcelFile> lines;
 	private ArrayList<LineFromOTGSMSExcel> lines2;
+	private ArrayList<OrsiLineFromExcel> orsiList;
+	private ArrayList<VTVLineFromExcel> lines3;
 	String[] ertekek;
 	private String[] idiots;
 	private String hosszu;
@@ -37,6 +48,8 @@ public class OpenFile {
 	private String[] legordulo;
 	private ArrayList<LineFromExcelFile> husszuUgyek;
 	private ArrayList<LineFromExcelFile> normUgyek;
+	private ArrayList<VTVLineFromExcel> normUgyekVTV;
+	private ArrayList<VTVLineFromExcel> hosszuUgyekVTV;
 	private String[] uresMappak;
 	private String[] uresFajlokVege;
 	private String[] nemKizart;
@@ -49,11 +62,36 @@ public class OpenFile {
 	private String vezetekes1;
 	private String masHetvege;
 	private String masHetvege1;
+	private JButton btnOrsi;
 
 	/**
 	 * Launch the application.
 	 */
 	
+	/*
+	 * a vtv-hez betölti az adatokat
+	 */
+	public void config2Betoltes() {
+		
+		try {
+			
+		
+			BufferedReader br = new BufferedReader(new FileReader("series2.conf"));
+			
+			vtvWords = br.readLine().split("=")[1].split(",");
+			VTVMove = br.readLine().split(":")[1].split(",");
+			VTVDeleting = br.readLine().split(":")[1].split(",");
+			kimenetVTV = br.readLine().split("=")[1];
+			kimenetNemVTV = br.readLine().split("=")[1];
+			
+			System.out.println(VTVDeleting[0]);
+			
+			br.close();
+			
+			
+		} catch (Exception ex) {}
+		
+	}
 	
 	public void configBetoltes() {
 			// TODO Auto-generated method stub
@@ -138,6 +176,9 @@ public class OpenFile {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Bűbájos OTG Excel Varázsló");
 		
+	
+		
+		
 		btnVCC = new JButton("VCC Fájl Betöltése");
 		
 		//btnVCC.setEnabled(false);
@@ -149,7 +190,7 @@ public class OpenFile {
 			
 			@Override
 			protected void paintComponent(Graphics g) {
-				g.drawImage(image, this.getX(), this.getY(), this.getWidth(), this.getHeight(), this);
+				g.drawImage(image, this.getX() - 100, this.getY()- 30, this.getWidth(), this.getHeight(), this);
 			}
 			
 		};
@@ -278,9 +319,285 @@ public class OpenFile {
 		
 		frame.getContentPane().add(jpanel, BorderLayout.CENTER);
 		
+		JButton btnVTV = new JButton("VTV ügyek");
+		frame.getContentPane().add(btnVTV, BorderLayout.WEST);
+		
+		btnVTV.addActionListener(new ActionListener() {
+
+		
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				File workingDirectory = new File(System.getProperty("user.dir"));
+				
+				JFileChooser chooser = new JFileChooser();
+				
+				chooser.setCurrentDirectory(workingDirectory);
+				
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			                "Excel fájl", "xlsx", "XLSX");
+			        chooser.setFileFilter(filter);
+			        int returnVal = chooser.showOpenDialog(null);
+			        if(returnVal == JFileChooser.APPROVE_OPTION) {
+			            
+			              String fileName = chooser.getSelectedFile().getParent() + "/";
+			              
+			              if (fileName != null && !fileName.equals("")) {
+			            	  
+			            	  try {
+			            
+			            	  lines3 = FileOperator.getLinesVTV(chooser.getSelectedFile().getPath());
+			            	  
+			            	  /*for (int i = 0; i < lines3.size(); ++i) {
+			            		  System.out.println(lines3.get(i).getUgyMegnevezese());
+			            	  }*/
+			            	  
+			            	  config2Betoltes();
+			            	  
+			            	  deletingItemsVTV();
+			            	  
+			            	  lines3 = normUgyekVTV;
+			            	  felbontasVTV();
+			            	  lines3 = normUgyekVTV;
+			            	  
+			            	  
+			            	  FileOperator.setLines3(chooser.getSelectedFile().getParent(), chooser.getSelectedFile().getName(), 
+				            			 lines3, hosszuUgyekVTV, kimenetVTV, kimenetNemVTV);
+				            	  
+				            	 // System.out.println(lines.get(0).toString());
+				            	 
+				            	 JOptionPane.showMessageDialog(null, "kész!");
+			            	  
+			            	  } catch (Exception EX) {
+			            		  
+			            	  }
+			}
+			  
+			
+		}
+			}
+
+			private void felbontasVTV() {
+				// TODO Auto-generated method stub
+				
+				
+				hosszuUgyekVTV = new ArrayList<VTVLineFromExcel>();
+				normUgyekVTV = new ArrayList<VTVLineFromExcel>();
+				//duplaUgyek = new ArrayList<LineFromExcelFile>();
+				
+				hosszuUgyekVTV.add(lines3.get(0));
+				normUgyekVTV.add(lines3.get(0));
+				
+				for (int i = 1; i < lines3.size(); ++i) {
+					
+						if (isHosszuVTV(lines3.get(i))) {
+							//System.out.println("hosszúúúú");
+							hosszuUgyekVTV.add(lines3.get(i));
+						} else {
+							normUgyekVTV.add(lines3.get(i));
+						}
+					
+					
+				}
+				
+			}
+
+			private boolean isHosszuVTV(VTVLineFromExcel ln) {
+				// TODO Auto-generated method stub
+				boolean hosszu = false;
+				
+				
+				
+				
+				//ezeket kell hosszúba mozgatni
+				
+				for (int i = 0; i < VTVMove.length && !hosszu; ++i) {
+					
+					String a = VTVMove[i].split("=")[0];
+					String b = VTVMove[i].split("=")[1];
+					
+					//System.out.println(a + " és " +  b);
+					
+					if (ln.getValueOf(a).equals(b)) {
+						hosszu = true;
+						
+						//System.out.println(a + "= "  + b);
+						//System.out.println(a + " egyenlő "  + b);
+						
+					} 
+					
+				
+					
+				}
+				
+				if (hosszu) {
+					return hosszu;
+				}
+				
+				for (int i = 0; i < vtvWords.length && !hosszu; ++i) {
+					//System.out.println(ln.getUgyMegnevezese().toLowerCase() + " " + vtvWords[i].toLowerCase());
+					
+					if (ln.getUgyMegnevezese().toLowerCase().contains(vtvWords[i].toLowerCase())) {
+						hosszu = true;
+					}
+					
+				}
+				
+				
+			
+			return hosszu;
+			}
+
+			private void deletingItemsVTV() {
+				// TODO Auto-generated method stub
+				
+				normUgyekVTV = new ArrayList<>();
+				
+				for (int i = 0; i < lines3.size(); ++i) {
+					
+					if (!deletingVTV(lines3.get(i))) {
+						
+						normUgyekVTV.add(lines3.get(i));
+					}
+				}
+				
+			}
+
+			private boolean deletingVTV(VTVLineFromExcel ln) {
+
+				// TODO Auto-generated method stub
+				
+				boolean hosszu = false;
+				
+				
+				
+				
+				for (int i = 0; i < VTVDeleting.length && !hosszu; ++i) {
+					//System.out.println(deleting[i]);
+					
+					
+					String a = VTVDeleting[i].split("=")[0];
+					String b = VTVDeleting[i].split("=")[1];
+					
+					//System.out.println(a + "lesz a "  + b);
+					
+					if (ln.getValueOf(a).equals(b)) {
+						hosszu = true;
+					}
+					
+				}
+				
+				if (hosszu) {
+					return hosszu;
+				}
+				
+				return false;
+			
+			}
+		});
+		
+		
+		
 		btnOTG = new JButton("OTG SMS excel");
 		
 		frame.getContentPane().add(btnOTG, BorderLayout.SOUTH);
+		
+		
+		btnOrsi = new JButton("Orsi Mobil");
+		
+		btnOrsi.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				File workingDirectory = new File(System.getProperty("user.dir"));
+				
+				JFileChooser chooser = new JFileChooser();
+				
+				chooser.setCurrentDirectory(workingDirectory);
+				
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			                "Excel fájl", "xlsx", "XLSX");
+			        chooser.setFileFilter(filter);
+			        int returnVal = chooser.showOpenDialog(null);
+			        if(returnVal == JFileChooser.APPROVE_OPTION) {
+			            
+			              String fileName = chooser.getSelectedFile().getParent() + "/";
+			              
+			              if (fileName != null && !fileName.equals("")) {
+			            	  
+			            	  try {
+			            
+			            	  System.out.println(fileName);
+			            	  
+			            	  orsiList = FileOperator.OrsiListGet(chooser.getSelectedFile());
+			            	  
+			            	  for (int i = 1; i < orsiList.size(); ++i) {
+			            		 // System.out.println(orsiList.get(i).getD());
+			            	    
+			            		  String valami = orsiList.get(i).getD();
+			            		  valami = valami.replaceAll("[^a-zA-Z0-9\\s,.:]+", "");
+			            		  valami = valami.replaceAll(" ", "");
+			            		  Pattern pattern = Pattern.compile("[0-9]+");
+			            		  Matcher matcher = pattern.matcher(valami);
+			            		  boolean nemTalaltTelefonszamot = true;
+			            		  String telefonszam = "";
+			            		  
+			            		  while (matcher.find() && nemTalaltTelefonszamot) {
+			            			  
+			            			  String szvg = matcher.group();
+			            			  
+			            			 switch (szvg.length()) {
+			            			 	case 8: if (vezetekes(szvg)) {szvg = "36" + szvg;  telefonszam = szvg;} break;
+			            			 	case 9: if (!vezetekes(szvg)) {szvg = "36" + szvg; telefonszam = szvg;} break;
+			            			 	case 11: if (szvg.substring(0, 2).equals("36") || szvg.substring(0, 2).equals("06")) {
+			            			 		if (szvg.substring(0,2).equals("06")) {
+			            			 			szvg = "3" + szvg.subSequence(1, 11);
+			            			 			
+			            			 		}
+			            			 		telefonszam = szvg;
+			            			 		
+			            			 	}
+			            			 }
+			            			 
+			            			
+			            			 
+			            			 //System.out.println("itt " + telefonszam);
+			            			 if (!vezetekes(telefonszam)) {
+			            				 //telefonszam = szvg;
+			            				 nemTalaltTelefonszamot = false;
+			            				 //System.out.println("talált");
+			            			 }
+			            		  }
+			            		  
+			            		  //System.out.println(orsiList.get(i).getB() + " " + telefonszam);
+			            		  orsiList.get(i).setC(telefonszam);
+			            		  
+			            		  
+			            		  System.out.println(orsiList.get(i).getC());
+			            	  }
+			            	  try {
+			   			        FileOperator.kiirOrsiList(orsiList, chooser.getSelectedFile());
+			             		  JOptionPane.showMessageDialog(null, "kész!");
+			   			        } catch (Exception ex) {
+			   	            		  JOptionPane.showMessageDialog(null, ex.toString(), "Hibaüzenet", JOptionPane.ERROR_MESSAGE);
+
+			   			        }
+			            	  
+			            	  } catch(Exception e)  {}
+			              }
+				
+			        }
+			        
+			        
+			
+		}
+		});
+		
+		frame.getContentPane().add(btnOrsi, BorderLayout.EAST);
 		
 		btnOTG.addActionListener(new ActionListener() {
 

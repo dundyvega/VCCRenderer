@@ -74,6 +74,82 @@ public final class FileOperator {
 		return str;
 	
 	}
+	
+	
+	
+	public static ArrayList<VTVLineFromExcel> getLinesVTV(String fileName) throws IOException {
+		// TODO Auto-generated method stub
+		ArrayList<VTVLineFromExcel> lines = new ArrayList<VTVLineFromExcel>();
+		
+		FileInputStream excelFile = new FileInputStream(fileName);
+		XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
+		XSSFSheet datatypeSheet = workbook.getSheetAt(0);
+		Iterator<Row> iterator = datatypeSheet.iterator();
+
+
+		
+		//adatok kiolvasása
+		while (iterator.hasNext()) {
+			
+
+			Row currentRow = iterator.next();
+			
+	
+			
+			VTVLineFromExcel line = new VTVLineFromExcel();
+
+
+			
+			line.setIktato(cellStringValue(currentRow.getCell(0)));
+			line.setSubject(cellStringValue(currentRow.getCell(1)));
+			line.setContactDate(cellStringValue(currentRow.getCell(2)));
+			line.setEszkoz(cellStringValue(currentRow.getCell(3)));
+			line.setErintett(cellStringValue(currentRow.getCell(4)));
+			line.setVtvHiba(cellStringValue(currentRow.getCell(5)));
+			line.setHibajelenseg(cellStringValue(currentRow.getCell(6)));
+			line.setHibajelensegMegnevezese(cellStringValue(currentRow.getCell(7)));
+			line.setHibaOka(cellStringValue(currentRow.getCell(8)));
+			line.setKivizsgalasEredmenye(cellStringValue(currentRow.getCell(9)));
+			line.setNemoOTGID(cellStringValue(currentRow.getCell(10)));
+			line.setEtID(cellStringValue(currentRow.getCell(11)));
+			line.setEszkozellenorzesVolt(cellStringValue(currentRow.getCell(12)));
+			line.setJelszintekRendben(cellStringValue(currentRow.getCell(13)));
+			line.setSelfInstal(cellStringValue(currentRow.getCell(14)));
+			line.setEventusIDAzonosito(cellStringValue(currentRow.getCell(15)));
+			line.setMlComplaintCoda(cellStringValue(currentRow.getCell(16)));
+			line.setMIWOType(cellStringValue(currentRow.getCell(17)));
+			line.setMIWOStatus(cellStringValue(currentRow.getCell(18)));
+			
+			line.setMIResolutionType(cellStringValue(currentRow.getCell(19)));
+			line.setMIDesc(cellStringValue(currentRow.getCell(20)));
+			line.setUgyMegnevezese(cellStringValue(currentRow.getCell(21)));
+			line.setNode(cellStringValue(currentRow.getCell(22)));
+			line.setHibaKod(cellStringValue(currentRow.getCell(23)));
+			
+			
+			////System.out.println(line.toString());	
+			
+			lines.add(line);
+			
+		
+			
+			////System.out.println(line.toString());
+		////System.out.println(line.getName());
+			
+		}
+		
+		////System.out.println("valami");
+		
+		workbook.close();
+		
+		return lines;
+		
+		
+	}
+
+
+	
+	
 
 	public static ArrayList<LineFromExcelFile> getLines(String fileName) throws IOException {
 		// TODO Auto-generated method stub
@@ -877,6 +953,201 @@ public final class FileOperator {
 		
 	}
 
+
+
+	public static void setLines3(String folder, String string, ArrayList<VTVLineFromExcel> lines3,
+			ArrayList<VTVLineFromExcel> hosszuUgyekVTV, String kimenetVTV, String kimenetNemVTV) throws IOException {
+		// TODO Auto-generated method stub
+		
+		
+		
+		////System.out.println(string);
+		string = folder + "/" + kimenetNemVTV;
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("data");
+		
+		kiiratas3(lines3, sheet);
+		
+
+		
+		
+		
+		FileOutputStream excelFile = new FileOutputStream(string);
+		  
+	
+		
+		  workbook.write(excelFile);
+		  workbook.close();
+		  
+		  excelFile.close();
+		  
+		  string = folder + "/" + kimenetVTV;
+		
+			 workbook = new XSSFWorkbook();
+			 sheet = workbook.createSheet("data");
+			
+			kiiratas3(hosszuUgyekVTV, sheet);
+			
+
+			
+			
+			
+			 excelFile = new FileOutputStream(string);
+			  
+		
+			
+			  workbook.write(excelFile);
+			  workbook.close();
+			  
+			  excelFile.close();
+	}
+
+
+
+	private static void kiiratas3(ArrayList<VTVLineFromExcel> lines3, XSSFSheet sheet) {
+		// TODO Auto-generated method stub
+		
+		int rowIndex = 0;
+		int cellIndex;
+		for (int i = 0; i < lines3.size(); ++i) {
+			
+			Row row = sheet.createRow(rowIndex++);
+			
+			cellIndex = 0;
+			
+			
+			//1.private String account_number;
+			Cell cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getIktato());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getSubject());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getContactDate());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getEszkoz());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getErintett());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getVtvHiba());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getHibajelenseg());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getHibajelensegMegnevezese());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getHibaOka());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getKivizsgalasEredmenye());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getNemoOTGID());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getEtID());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getEszkozellenorzesVolt());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getJelszintekRendben());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getSelfInstal());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getEventusIDAzonosito());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getMlComplaintCoda());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getMIWOType());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getMIWOStatus());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getMIResolutionType());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getMIDesc());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getUgyMegnevezese());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getNode());
+			cell = row.createCell(cellIndex++); cell.setCellValue(lines3.get(i).getHibaKod());
+		
+	}
+	}
+
+
+
+	public static ArrayList<OrsiLineFromExcel> OrsiListGet(File file) throws IOException {
+		// TODO Auto-generated method stub
+		
+		ArrayList<OrsiLineFromExcel> lines = new ArrayList<OrsiLineFromExcel>();
+		
+		
+		
+		FileInputStream excelFile = new FileInputStream(file.getPath());
+		XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
+		XSSFSheet datatypeSheet = workbook.getSheetAt(0);
+		Iterator<Row> iterator = datatypeSheet.iterator();
+
+
+		
+		//adatok kiolvasása
+		while (iterator.hasNext()) {
+			
+
+			Row currentRow = iterator.next();
+			
+	
+			
+			OrsiLineFromExcel line = new OrsiLineFromExcel();
+
+			
+			
+			//line.setUres(cellStringValue(currentRow.getCell(0)));
+			line.setA(cellStringValue(currentRow.getCell(0)));
+			line.setB(cellStringValue(currentRow.getCell(1)));
+			line.setC(cellStringValue(currentRow.getCell(2)));
+			line.setD(cellStringValue(currentRow.getCell(3)));
+			
+			
+			lines.add(line);
+			
+			////System.out.println(line.toString());
+			
+		}
+		
+		////System.out.println("valami");
+		
+		workbook.close();
+		
+		return lines;
+		
+		
+		
+		
+		
+		
+		
+	}
+
+
+
+	public static void kiirOrsiList(ArrayList<OrsiLineFromExcel> orsiList, File file) throws IOException {
+		// TODO Auto-generated method stub
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("data");
+		
+		
+		String string = file.getParent();
+		string = file.getAbsolutePath().split(".xlsx")[0] + " - Automata IVR.xlsx";
+		
+		//string += "/" + "valami.xlsx";
+		//kiiratas(lines, sheet);
+		
+		int rowIndex = 0;
+		int cellIndex;
+		for (int i = 0; i < orsiList.size(); ++i) {
+			
+			Row row = sheet.createRow(rowIndex++);
+			
+			cellIndex = 0;
+			
+			
+			//1.private String account_number;
+			Cell cell = row.createCell(cellIndex++);
+			cell.setCellValue(orsiList.get(i).getA());
+			 cell = row.createCell(cellIndex++);
+			cell.setCellValue(orsiList.get(i).getB());
+			 cell = row.createCell(cellIndex++);
+			cell.setCellValue(orsiList.get(i).getC());
+			 cell = row.createCell(cellIndex++);
+			cell.setCellValue(orsiList.get(i).getD());
+			
+		}
+		
+		
+		FileOutputStream excelFile = new FileOutputStream(string);
+		  
+	
+		
+		  workbook.write(excelFile);
+		  workbook.close();
+		  
+		  excelFile.close();
+		
+	}
 
 	
 
